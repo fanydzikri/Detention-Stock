@@ -851,7 +851,7 @@
     <div class="toolbar">
       <h2>Generic Code belum terdisplay</h2>
       <div class="actions">
-        <input type="text" class="search-input" id="searchInput" placeholder="Cari generic code / nama SKU / MC...">
+        <input type="text" class="search-input" id="searchInput" placeholder="Cari generic code / nama artikel / MC...">
         <select class="m-sort" id="mSort" aria-label="Urutkan">
           <option value="totalQty:desc">Urutkan: Qty terbanyak</option>
           <option value="totalQty:asc">Urutkan: Qty tersedikit</option>
@@ -1884,7 +1884,7 @@
           <th style="width:24px;"></th>
           ${showFoto ? '<th class="th-foto">Foto</th>' : ''}
           <th data-sort="genericCode">Generic Code ${arrow('genericCode')}</th>
-          <th data-sort="sampleName">Contoh Nama SKU ${arrow('sampleName')}</th>
+          <th data-sort="sampleName">Nama Artikel ${arrow('sampleName')}</th>
           <th data-sort="mc2">MC LV 2 ${arrow('mc2')}</th>
           <th data-sort="mc3">MC LV 3 ${arrow('mc3')}</th>
           <th data-sort="mc4">MC LV 4 ${arrow('mc4')}</th>
@@ -1902,7 +1902,7 @@
         <td class="c-caret"><span class="caret ${isOpen ? 'open':''}">&#9656;</span></td>
         ${showFoto ? `<td class="c-foto">${thumbHtml(r.genericCode, pname, r.colors)}</td>` : ''}
         <td class="mono c-gc">${escapeHtml(r.genericCode)}</td>
-        <td class="name-cell c-name">${escapeHtml(r.sampleName)}</td>
+        <td class="name-cell c-name" title="${escapeAttr(r.sampleName)}">${escapeHtml(pname)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc2)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc3)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc4)}</td>
@@ -2185,7 +2185,7 @@
     }
     const wsSummaryData = exportRows.map(r => ({
       'Generic Code': r.genericCode,
-      'Contoh Nama SKU': r.sampleName,
+      'Nama Artikel': String(r.sampleName).split(',')[0].trim(),
       'MC LV 2': r.mc2,
       'MC LV 3': r.mc3,
       'MC LV 4': r.mc4,
