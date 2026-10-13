@@ -742,6 +742,7 @@
     const warehouseSet = new Set();
     const salesAreaSet = new Set();   // zone Sales Area + bin Selling area (S)
     const zoneSaSet = new Set();      // khusus zone Sales Area, untuk catatan
+    const noAvailGeneric = new Set(); // generic yang punya baris gudang dengan Available Qty <= 0
     const genericInfo = {}; // genericCode -> {sampleName, skus:Set, totalQty, bins:Set, rows:[]}
 
     rows.forEach(r => {
@@ -749,7 +750,16 @@
       if(!gc) return;
       const zoneNorm = normalizeZone(r[zoneKey]);
 
-      if(zoneNorm === 'warehouse') warehouseSet.add(gc);
+      // Stok gudang hanya dihitung bila Available Qty > 0.
+      // Barang yang sudah teralokasi / booking (available 0 atau minus) tidak bisa dipajang.
+      let whQty = null;
+      if(zoneNorm === 'warehouse' && qtyKey){
+        const q = parseFloat(r[qtyKey]);
+        whQty = isNaN(q) ? 0 : q;
+      }
+      const whAvailable = zoneNorm === 'warehouse' && (whQty === null || whQty > 0);
+      if(zoneNorm === 'warehouse' && !whAvailable) noAvailGeneric.add(gc);
+      if(whAvailable) warehouseSet.add(gc);
       // Terhitung terdisplay bila zone-nya Sales Area ATAU bin-nya bin Selling area (awalan S, mis. SA-, SB-, SH-)
       if(zoneNorm === 'sales area'){ salesAreaSet.add(gc); zoneSaSet.add(gc); }
       else if(binKey && isSellingBin(r[binKey])){ salesAreaSet.add(gc); }
@@ -758,7 +768,7 @@
         genericInfo[gc] = {sampleName:null, mc2:'', mc3:'', mc4:'', skus:new Set(), totalQty:0, bins:new Set(), rows:[]};
       }
       const info = genericInfo[gc];
-      if(zoneNorm === 'warehouse'){
+      if(whAvailable){
         if(!info.sampleName && skuNameKey) info.sampleName = r[skuNameKey];
         if(!info.mc2 && mc2Key && String(r[mc2Key]).trim()) info.mc2 = String(r[mc2Key]).trim();
         if(!info.mc3 && mc3Key && String(r[mc3Key]).trim()) info.mc3 = String(r[mc3Key]).trim();
@@ -781,6 +791,14 @@
     });
 
     const missing = [...warehouseSet].filter(gc => !salesAreaSet.has(gc));
+    // generic yang di gudang hanya berisi stok teralokasi (Available Qty 0), tidak dihitung
+    const onlyAllocated = [...noAvailGeneric].filter(gc => !warehouseSet.has(gc) && !salesAreaSet.has(gc)).length;
+    if(onlyAllocated && !qtyFallback){
+      document.getElementById('excludeText').innerHTML +=
+        (exNote.classList.contains('show') ? '<br>' : '') +
+        `<b>${onlyAllocated} generic tidak dihitung</b> karena stok di gudangnya tidak tersedia (Available Qty 0 atau minus, mis. sudah teralokasi), jadi memang belum bisa dipajang.`;
+      exNote.classList.add('show');
+    }
     const viaSellingBin = [...warehouseSet].filter(gc => salesAreaSet.has(gc) && !zoneSaSet.has(gc)).length;
     if(qtyFallback){
       document.getElementById('excludeText').innerHTML +=
