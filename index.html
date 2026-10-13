@@ -313,8 +313,168 @@
     .hero .wrap{grid-template-columns:1fr;gap:24px;padding-top:28px;padding-bottom:34px;}
     .hero h1{font-size:27px;}
   }
+
+  /* ---------- Tabs ---------- */
+  .tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:0 0 20px;overflow-x:auto;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    appearance:none;border:none;background:none;cursor:pointer;font-family:inherit;
+    font-size:14.5px;font-weight:700;color:var(--ink-soft);padding:12px 18px;margin-bottom:-2px;
+    border-bottom:3px solid transparent;white-space:nowrap;display:inline-flex;align-items:center;gap:8px;
+  }
+  .tab:hover{color:var(--navy);}
+  .tab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--orange);}
+  .tab:focus-visible{outline:3px solid var(--orange);outline-offset:-3px;border-radius:6px;}
+  .tab-badge{background:var(--orange);color:#fff;border-radius:999px;font-size:11.5px;padding:1px 8px;font-weight:700;}
+  .tab[aria-selected="false"] .tab-badge{background:var(--line);color:var(--ink-soft);}
+  .tab-panel[hidden]{display:none;}
+  .toolbar{scroll-margin-top:84px;}
+
+  /* ---------- Analisa per MC ---------- */
+  .an-head h2{font-size:18px;font-weight:800;margin:0 0 4px;color:var(--navy-ink);letter-spacing:-0.01em;}
+  .an-head p{margin:0 0 16px;color:var(--ink-soft);font-size:13px;max-width:860px;}
+  .an-head p b{color:var(--ink);}
+  .an-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+  .kpi .k-num{font-size:28px;font-weight:800;color:var(--navy);letter-spacing:-0.02em;line-height:1.1;}
+  .kpi .k-lbl{color:var(--ink-soft);font-size:12.5px;margin-top:4px;font-weight:500;}
+  .kpi.good .k-num{color:var(--teal);}
+  .kpi.warn{background:var(--orange);border-color:var(--orange);}
+  .kpi.warn .k-num{color:#fff;}
+  .kpi.warn .k-lbl{color:#FFE3D6;font-weight:600;}
+  .an-controls{
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px;
+  }
+  .seg{display:inline-flex;background:var(--navy-tint);border-radius:8px;padding:3px;}
+  .seg button{border:none;background:none;font-family:inherit;font-weight:700;font-size:13px;color:var(--navy);padding:7px 14px;border-radius:6px;cursor:pointer;}
+  .seg button[aria-pressed="true"]{background:var(--navy);color:#fff;}
+  .seg button:focus-visible{outline:3px solid var(--orange);outline-offset:1px;}
+  .an-select, .an-search{
+    border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font-family:inherit;
+    font-size:13px;background:#fff;color:var(--ink);
+  }
+  .an-select{cursor:pointer;max-width:185px;}
+  .an-search{min-width:150px;width:170px;}
+  .an-select:focus, .an-search:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px var(--navy-tint);}
+  .an-controls .spacer{margin-left:auto;}
+  .an-merge{
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;
+    font-size:13px;font-weight:700;color:var(--navy);background:var(--navy-tint);
+    border-radius:8px;padding:8px 12px;
+  }
+  .an-merge input{accent-color:var(--orange);width:16px;height:16px;margin:0;cursor:pointer;}
+  .an-merge:has(input:checked){background:var(--orange-tint);color:var(--orange-deep);}
+  .an-merge:has(input:focus-visible){outline:3px solid var(--orange);outline-offset:1px;}
+  .an-select:disabled{opacity:.45;cursor:not-allowed;}
+  .an-count{font-size:13px;color:var(--ink-soft);margin:0 2px 10px;}
+  .an-count strong{color:var(--navy);}
+
+  .an-table tbody td{padding:11px 12px;vertical-align:middle;}
+  .an-table tbody tr:hover{background:#F7F9FE;}
+  .an-table td.a-name{min-width:200px;}
+  .an-table .a-title{font-weight:700;color:var(--navy-ink);}
+  .an-table .a-sub{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
+  .an-table td.a-miss{color:var(--orange-deep);}
+  .an-table td.a-pct{min-width:210px;}
+  .pct-line{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:5px;}
+  .pct-line b{font-size:14px;font-weight:800;}
+  .pct-line .hint{font-size:11.5px;color:var(--ink-soft);font-weight:600;white-space:nowrap;}
+  .mini-bar{position:relative;height:8px;background:var(--navy-tint);border-radius:999px;}
+  .mini-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--orange);}
+  .mini-bar u{position:absolute;top:-3px;bottom:-3px;left:95%;width:2px;background:var(--navy-ink);opacity:.65;}
+  .lvl-ok .mini-bar i{background:#1E9E7A;}
+  .lvl-ok .pct-line b{color:var(--teal);}
+  .lvl-mid .pct-line b{color:var(--orange-deep);}
+  .lvl-low .pct-line b{color:#C0392B;}
+  .lvl-low .mini-bar i{background:#D64545;}
+  .link-btn{
+    border:1px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;
+    padding:6px 12px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;
+  }
+  .link-btn:hover{background:var(--navy);color:#fff;}
+  .link-btn:focus-visible{outline:3px solid var(--orange);outline-offset:2px;}
+  .link-btn[disabled]{opacity:.35;cursor:not-allowed;background:#fff;color:var(--navy);}
+  .an-table tfoot td{background:var(--navy-tint);font-weight:800;border-top:2px solid var(--navy);padding:11px 12px;color:var(--navy-ink);}
+  .an-table tfoot td.num-cell{font-family:'JetBrains Mono',monospace;}
+
+
+  /* ---------- Foto produk ---------- */
+  .foto-bar{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    background:var(--panel);border:1px dashed var(--line-strong);border-radius:10px;
+    padding:9px 14px;margin:0 0 14px;font-size:13px;color:var(--ink-soft);
+  }
+  .foto-bar svg{flex:none;color:var(--navy);}
+  .foto-bar b{color:var(--navy);}
+  .foto-bar.ok{border-style:solid;border-color:var(--line);}
+  .foto-bar .btn{margin-left:auto;padding:6px 12px;font-size:12.5px;}
+  td.c-foto, th.th-foto{width:72px;}
+  td.c-foto{padding-top:8px;padding-bottom:8px;}
+  .thumb{
+    display:flex;align-items:center;justify-content:center;
+    width:56px;height:56px;border-radius:10px;overflow:hidden;
+    border:1px solid var(--line);background:#fff;padding:0;cursor:zoom-in;
+  }
+  .thumb img{width:100%;height:100%;object-fit:contain;display:block;}
+  .thumb:hover{border-color:var(--navy);}
+  .thumb:focus-visible{outline:3px solid var(--orange);outline-offset:2px;}
+  .thumb.noimg{background:var(--navy-tint);color:#9AA6C9;cursor:pointer;}
+  .detail-inner td.d-foto .thumb{width:40px;height:40px;border-radius:8px;}
+
+  .modal{
+    position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+    background:rgba(11,27,74,.55);padding:16px;
+  }
+  .modal.open{display:flex;}
+  .modal-box{
+    position:relative;background:#fff;border-radius:14px;width:100%;max-width:640px;max-height:90vh;
+    overflow:auto;padding:22px 24px;box-shadow:0 24px 60px rgba(11,27,74,.35);
+  }
+  .modal-box h3{margin:0 0 6px;font-size:18px;font-weight:800;color:var(--navy-ink);padding-right:36px;}
+  .modal-box p{margin:0 0 12px;color:var(--ink-soft);font-size:13.5px;}
+  .modal-x{
+    position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;
+    border:none;background:var(--navy-tint);color:var(--navy);font-size:20px;line-height:1;cursor:pointer;z-index:2;
+  }
+  .modal-x:hover{background:var(--navy);color:#fff;}
+  .modal-x:focus-visible{outline:3px solid var(--orange);outline-offset:2px;}
+  .steps{margin:0 0 14px;padding-left:20px;font-size:13.5px;color:var(--ink);}
+  .steps li{margin-bottom:6px;}
+  .steps code{font-family:'JetBrains Mono',monospace;background:var(--navy-tint);border-radius:4px;padding:1px 5px;font-size:12px;}
+  .modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;align-items:center;}
+  .code-box{width:100%;height:120px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid var(--line-strong);border-radius:8px;padding:8px;color:var(--ink-soft);resize:vertical;}
+  details.code-d summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--navy);margin:6px 0;}
+  .copy-ok{color:var(--teal);font-weight:700;font-size:12.5px;}
+
+  .modal-box.lb-box{max-width:880px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:22px;padding:22px;}
+  .lb-img{
+    background:#fff;border:1px solid var(--line);border-radius:12px;min-height:280px;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .lb-img img{max-width:100%;max-height:68vh;object-fit:contain;display:block;}
+  .lb-img .lb-none{padding:24px;text-align:center;color:var(--ink-soft);font-size:13px;}
+  .lb-title{font-size:18px;font-weight:800;color:var(--navy-ink);line-height:1.25;padding-right:34px;}
+  .lb-sub{font-size:12.5px;color:var(--ink-soft);margin:6px 0 14px;}
+  .lb-sub b{font-family:'JetBrains Mono',monospace;color:var(--ink);}
+  .lb-label{font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
+  .lb-colors{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+  .lb-chip{
+    border:1px solid var(--line-strong);background:#fff;border-radius:999px;padding:5px 12px;
+    font-family:inherit;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer;
+  }
+  .lb-chip:hover{border-color:var(--navy);}
+  .lb-chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .lb-chip.match{box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--orange);}
+  .lb-note{font-size:12px;color:var(--ink-soft);margin:0 0 14px;}
+  .lb-link{
+    display:inline-block;border:1px solid var(--navy);color:var(--navy);border-radius:8px;
+    padding:8px 14px;font-size:13px;font-weight:700;text-decoration:none;
+  }
+  .lb-link:hover{background:var(--navy);color:#fff;}
+
   /* elemen khusus mobile (disembunyikan di PC) */
-  .m-sort, .ms-head, .to-top, td.c-break{display:none;}
+  .m-sort, .ms-head, .to-top, td.c-break, td.c-mcm{display:none;}
 
   @media (max-width:640px){
     body{font-size:14px;}
@@ -479,6 +639,75 @@
 
     footer .wrap{flex-direction:column;gap:6px;text-align:center;padding-bottom:calc(18px + env(safe-area-inset-bottom));}
 
+    /* tab + analisa */
+    .tabs{margin-bottom:16px;}
+    .tab{flex:1;justify-content:center;padding:11px 6px;font-size:13px;gap:6px;}
+    .an-head h2{font-size:16.5px;}
+    .an-head p{font-size:12.5px;}
+    .an-kpis{grid-template-columns:1fr 1fr;gap:10px;}
+    .kpi{padding:12px 14px;}
+    .kpi:first-child{grid-column:1 / -1;}
+    .kpi .k-num{font-size:24px;}
+    .an-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;}
+    .seg{grid-column:1 / -1;display:flex;}
+    .an-merge{grid-column:1 / -1;padding:10px 12px;font-size:13.5px;}
+    .seg button{flex:1;padding:9px 8px;}
+    .an-select{max-width:none;width:100%;font-size:16px;padding:10px;}
+    #anSortSel{grid-column:1 / -1;}
+    .hide-m{display:none;}
+    .an-search{grid-column:1 / -1;min-width:0;font-size:16px;padding:10px 12px;}
+    .an-controls .spacer{display:none;}
+    .an-controls .btn{grid-column:1 / -1;}
+    .an-wrap{border:none;background:transparent;overflow:visible;border-radius:0;}
+    .an-table, .an-table tbody{display:block;background:transparent;}
+    .an-table thead, .an-table tfoot{display:none;}
+    .an-table tr.an-row{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:10px 6px;
+      background:var(--panel);border:1px solid var(--line);border-radius:12px;
+      padding:12px 14px;margin-top:10px;
+    }
+    .an-table tbody tr:hover{background:var(--panel);}
+    .an-table tr.an-row > td{display:block;padding:0;border:none;min-width:0;}
+    .an-table td.a-name{grid-column:1 / -1;order:1;min-width:0;}
+    .an-table td.a-pct{grid-column:1 / -1;order:2;min-width:0;}
+    .an-table td.a-wh, .an-table td.a-shown, .an-table td.a-miss, .an-table td.a-qty{order:3;text-align:left;font-size:13.5px;}
+    .an-table td[data-l]::before{
+      content:attr(data-l);display:block;font-family:'Plus Jakarta Sans',sans-serif;
+      font-size:10.5px;font-weight:600;color:var(--ink-soft);margin-bottom:1px;
+    }
+    .an-table td.a-act{grid-column:1 / -1;order:4;}
+    .an-table .link-btn{width:100%;padding:10px;font-size:13px;}
+    .an-count{text-align:center;}
+
+    /* foto produk */
+    .foto-bar{padding:10px 12px;font-size:12.5px;}
+    .foto-bar .btn{margin-left:0;width:100%;}
+    .thumb{width:78px;height:78px;border-radius:12px;}
+    tr.main-row > td.c-mcm{display:none;}
+    table.has-foto tr.main-row{
+      display:grid;grid-template-columns:78px minmax(0,1fr) auto;
+      grid-template-areas:"foto gc qty" "foto name name" "foto mcm mcm" "line line line" "sku bin caret";
+      column-gap:10px;row-gap:6px;align-items:center;
+    }
+    table.has-foto tr.main-row > td.c-foto{grid-area:foto;align-self:start;padding:0;width:auto;}
+    table.has-foto tr.main-row .c-gc{grid-area:gc;}
+    table.has-foto tr.main-row .c-qty{grid-area:qty;justify-self:end;}
+    table.has-foto tr.main-row .c-name{grid-area:name;}
+    table.has-foto tr.main-row > td.c-mcm{display:flex;grid-area:mcm;flex-wrap:wrap;gap:4px;align-self:start;}
+    table.has-foto tr.main-row > td.c-mc{display:none;}
+    table.has-foto tr.main-row > td.c-break{grid-area:line;}
+    table.has-foto tr.main-row .c-sku{grid-area:sku;}
+    table.has-foto tr.main-row .c-bin{grid-area:bin;}
+    table.has-foto tr.main-row .c-caret{grid-area:caret;margin-left:0;}
+    .c-mcm span{font-size:11px;font-weight:600;color:var(--navy);background:var(--navy-tint);border-radius:5px;padding:2px 7px;white-space:nowrap;}
+    .detail-inner td.d-foto{display:none !important;}
+    .modal{align-items:flex-end;padding:0;}
+    .modal-box{border-radius:16px 16px 0 0;max-height:90vh;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-width:none;}
+    .modal-box.lb-box{grid-template-columns:1fr;gap:14px;padding:18px 16px calc(18px + env(safe-area-inset-bottom));}
+    .lb-img{min-height:200px;}
+    .lb-img img{max-height:44vh;}
+    .lb-title{font-size:16.5px;}
+
     /* tombol kembali ke atas */
     .to-top{
       display:flex;position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;
@@ -564,6 +793,13 @@
       <span id="excludeText"></span>
     </div>
 
+    <div class="tabs" role="tablist" aria-label="Menu tools">
+      <button type="button" class="tab" role="tab" id="tabArtikel" data-tab="artikel" aria-selected="true" aria-controls="panelArtikel"><span><span class="hide-m">Artikel </span>Belum Terdisplay</span> <span class="tab-badge" id="tabBadge">0</span></button>
+      <button type="button" class="tab" role="tab" id="tabAnalisa" data-tab="analisa" aria-selected="false" aria-controls="panelAnalisa">Analisa % per MC</button>
+    </div>
+
+    <div class="tab-panel" id="panelArtikel" role="tabpanel" aria-labelledby="tabArtikel">
+
     <div class="coverage" id="coverage">
       <div class="pct"><span id="covPct">0%</span><small>generic terdisplay</small></div>
       <div>
@@ -585,6 +821,12 @@
       <div class="stat"><div class="num" id="statWh">0</div><div class="lbl">Ada di Warehouse</div></div>
       <div class="stat ok"><div class="num" id="statSa">0</div><div class="lbl">Ada di Selling Area</div></div>
       <div class="stat flag"><div class="num" id="statMissing">0</div><div class="lbl">Belum Terdisplay</div></div>
+    </div>
+
+    <div class="foto-bar" id="fotoBar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span id="fotoBarText">Memeriksa foto produk&hellip;</span>
+      <button type="button" class="btn ghost" id="fotoBtn">Aktifkan foto</button>
     </div>
 
     <div class="toolbar">
@@ -613,6 +855,44 @@
 
     <div id="tableWrap"></div>
 
+    </div><!-- /panelArtikel -->
+
+    <div class="tab-panel" id="panelAnalisa" role="tabpanel" aria-labelledby="tabAnalisa" hidden>
+      <div class="an-head">
+        <h2>Analisa % terdisplay per MC</h2>
+        <p><b>Cara hitung:</b> % terdisplay = jumlah generic yang sudah ada di Selling area &divide; jumlah generic yang punya stok tersedia (Available Qty &gt; 0) di Warehouse. Garis tipis pada bar menandai target 95%. Klik <b>Lihat artikel</b> untuk melihat daftar generic yang belum terdisplay di MC tersebut.</p>
+      </div>
+
+      <div class="an-kpis" id="anKpis"></div>
+
+      <div class="an-controls">
+        <div class="seg" role="group" aria-label="Level MC">
+          <button type="button" data-level="mc3" aria-pressed="true">Per MC LV 3</button>
+          <button type="button" data-level="mc4" aria-pressed="false">Per MC LV 4</button>
+        </div>
+        <label class="an-merge" title="Gabungkan semua MC LV 2, tampilkan langsung per MC LV 3 / LV 4"><input type="checkbox" id="anMerge"> Abaikan MC LV 2</label>
+        <select class="an-select" id="anMc2" aria-label="Filter MC LV 2"></select>
+        <select class="an-select" id="anStatus" aria-label="Filter status">
+          <option value="">Semua status</option>
+          <option value="below">Di bawah target 95%</option>
+          <option value="reached">Sudah capai target</option>
+        </select>
+        <select class="an-select" id="anSortSel" aria-label="Urutkan">
+          <option value="pct:asc">Urutkan: % terendah</option>
+          <option value="pct:desc">Urutkan: % tertinggi</option>
+          <option value="miss:desc">Urutkan: Belum terdisplay terbanyak</option>
+          <option value="wh:desc">Urutkan: Generic terbanyak</option>
+          <option value="name:asc">Urutkan: Nama A&ndash;Z</option>
+        </select>
+        <input class="an-search" id="anSearch" type="text" placeholder="Cari MC...">
+        <span class="spacer"></span>
+        <button class="btn" id="anExportBtn" type="button">Export Analisa</button>
+      </div>
+
+      <div class="an-count" id="anCount"></div>
+      <div id="anTableWrap"></div>
+    </div>
+
   </div>
 
 </main>
@@ -623,6 +903,45 @@
     <span>Semua perhitungan berjalan di browser. File tidak diunggah ke server mana pun.</span>
   </div>
 </footer>
+
+<div class="modal" id="fotoModal" role="dialog" aria-modal="true" aria-labelledby="fotoModalTitle">
+  <div class="modal-box">
+    <button type="button" class="modal-x" data-close aria-label="Tutup">&times;</button>
+    <h3 id="fotoModalTitle">Foto produk dari eigeradventure.com</h3>
+    <p id="fotoModalStatus"></p>
+    <ol class="steps">
+      <li>Klik <b>Salin kode</b> di bawah. Kode berisi daftar <b id="fotoCount">0</b> produk dari file export yang sedang dibuka.</li>
+      <li>Buka <b>https://www.eigeradventure.com</b> di Chrome (tab baru), tekan <code>F12</code>, lalu pilih tab <b>Console</b>.</li>
+      <li>Tempel kode lalu tekan Enter. Jika Chrome menolak menempel, ketik <code>allow pasting</code>, Enter, lalu tempel ulang.</li>
+      <li>Tunggu sampai selesai (kira-kira 5&ndash;15 menit). File <code>gambar.json</code> akan terunduh otomatis.</li>
+      <li>Upload <code>gambar.json</code> ke repo GitHub (Add file &rarr; Upload files) bersama <code>index.html</code>, tunggu 1&ndash;2 menit, lalu tekan Ctrl+F5.</li>
+    </ol>
+    <div class="modal-actions">
+      <button type="button" class="btn" id="fotoCopyBtn">Salin kode</button>
+      <button type="button" class="btn ghost" id="fotoLoadBtn">Muat gambar.json dari komputer</button>
+      <span class="copy-ok" id="fotoCopyOk" hidden>Kode tersalin</span>
+    </div>
+    <details class="code-d"><summary>Lihat kode</summary><textarea class="code-box" id="fotoCode" readonly spellcheck="false"></textarea></details>
+    <input type="file" id="fotoFile" accept=".json,application/json" hidden>
+  </div>
+</div>
+
+<div class="modal" id="lb" role="dialog" aria-modal="true" aria-label="Foto produk">
+  <div class="modal-box lb-box">
+    <button type="button" class="modal-x" data-close aria-label="Tutup">&times;</button>
+    <div class="lb-img" id="lbImg"></div>
+    <div>
+      <div class="lb-title" id="lbTitle"></div>
+      <div class="lb-sub" id="lbSub"></div>
+      <div id="lbColorsWrap" hidden>
+        <div class="lb-label">Warna di website</div>
+        <div class="lb-colors" id="lbColors"></div>
+        <div class="lb-note" id="lbNote"></div>
+      </div>
+      <a class="lb-link" id="lbLink" target="_blank" rel="noopener noreferrer">Buka di eigeradventure.com &#8599;</a>
+    </div>
+  </div>
+</div>
 
 <button class="to-top" id="toTop" aria-label="Kembali ke atas">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
@@ -651,6 +970,10 @@
   const resetFilterBtn = document.getElementById('resetFilterBtn');
   const filterCount = document.getElementById('filterCount');
 
+  let analysisRows = [];     // semua generic ber-stok di gudang: {gc, mc2, mc3, mc4, shown, qty}
+  let anLevel = 'mc3';
+  let anMerge = false;   // true = abaikan MC LV 2 (gabungkan semua LV 2)
+  let anSort = {key:'pct', dir:'asc'};
   let summaryRows = [];      // {genericCode, sampleName, skuCount, totalQty, binCodes, zonesFound}
   let detailByGeneric = {};  // genericCode -> array of raw rows (full column set)
   let allColumns = [];
@@ -726,6 +1049,17 @@
     };
     const excludedRows = rows.filter(isExcluded);
     rows = rows.filter(r => !isExcluded(r));
+
+    // Daftar produk (kode generic + nama) dari export ini, dipakai pembuat gambar.json
+    skuNameKeyG = skuNameKey;
+    const prodMap = new Map();
+    rows.forEach(r => {
+      const gc0 = String(r[genericKey] ?? '').trim();
+      if(!gc0 || prodMap.has(gc0)) return;
+      const nm0 = skuNameKey ? String(r[skuNameKey] ?? '').split(',')[0].trim() : '';
+      if(nm0) prodMap.set(gc0, nm0);
+    });
+    exportProducts = [...prodMap.entries()];
     const exNote = document.getElementById('excludeNote');
     document.getElementById('excludeText').innerHTML = '';
     if(excludedRows.length){
@@ -824,6 +1158,7 @@
         skuCount: info.skus.size || info.rows.length,
         totalQty: info.totalQty,
         binCodes: [...info.bins].sort().join(', '),
+        colors: [...new Set(info.rows.map(skuColor).filter(Boolean))],
       };
     });
     detailByGeneric = {};
@@ -842,8 +1177,552 @@
     sortState = {key:'totalQty', dir:'desc'};
     LEVELS.forEach(l => selected[l].clear());
     refreshFilterOptions();
+    // Data untuk tab Analisa: semua generic ber-stok di gudang, ditandai sudah/belum terdisplay
+    analysisRows = [...warehouseSet].map(gc => {
+      const info = genericInfo[gc];
+      return {gc, mc2: info.mc2 || '-', mc3: info.mc3 || '-', mc4: info.mc4 || '-', shown: salesAreaSet.has(gc), qty: info.totalQty};
+    });
+    document.getElementById('tabBadge').textContent = missing.length;
+    anLevel = 'mc3';
+    anMerge = false;
+    document.getElementById('anMerge').checked = false;
+    document.getElementById('anMc2').disabled = false;
+    anSort = {key:'pct', dir:'asc'};
+    document.getElementById('anStatus').value = '';
+    document.getElementById('anSearch').value = '';
+    populateAnMc2();
+    syncAnControls();
+    switchTab('artikel');
     resultsArea.style.display = 'block';
     renderTable();
+    renderAnalysis();
+    updateFotoBar();
+  }
+
+  // ===== Foto produk (gambar.json dari eigeradventure.com) =====
+  const IMG_BASE_DEFAULT = 'https://d1yutv2xslo29o.cloudfront.net/product/variant/media/web/';
+  const SITE = 'https://www.eigeradventure.com';
+  let imgDB = null;          // {base, items:{kodeGeneric:{n,u,d,c:{WARNA:file}}}, bySlug}
+  let imgState = 'loading';  // loading | ok | missing
+  let exportProducts = [];   // [[kodeGeneric, namaProduk]] dari file export yang dibuka
+  let skuNameKeyG = null;
+  const PLACEHOLDER = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>';
+  // Singkatan warna di data toko -> kemungkinan nama warna di website
+  const COLOR_ALIASES = {
+    BLK:['BLACK'], NAV:['NAVY'], NVY:['NAVY'], GRY:['GREY','GRAY'], BLU:['BLUE'], BRW:['BROWN'], KHK:['KHAKI'],
+    GRE:['GREEN'], GRN:['GREEN'], WHT:['WHITE'], PNK:['PINK'], DGR:['DARKGREY','DARKGRAY'], OWH:['OFFWHITE'],
+    TER:['TERRACOTTA','TERACOTTA'], YEL:['YELLOW'], MAR:['MAROON'], ORA:['ORANGE'], CRE:['CREAM'],
+    LGY:['LIGHTGREY','LIGHTGRAY'], LBL:['LIGHTBLUE'], DBR:['DARKBROWN'], MUS:['MUSTARD'], LGE:['LIGHTGREEN'],
+    DGN:['DARKGREEN'], PUR:['PURPLE'], CLY:['CLAY'], TOS:['TOSCA','TURQUOISE'], DBL:['DARKBLUE'], OLI:['OLIVE'],
+    RED:['RED'], SIL:['SILVER']
+  };
+  const slugify = n => String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const normColor = s => String(s || '').toUpperCase().replace(/[^A-Z]/g, '');
+  const isSubseq = (a, b) => { let i = 0; for(const ch of b){ if(i < a.length && ch === a[i]) i++; } return i === a.length; };
+  const safeFile = f => typeof f === 'string' && /^[\w.-]+$/.test(f);
+
+  // warna dari nama SKU: "NAMA, WARNA, UKURAN"
+  function skuColor(row){
+    if(!skuNameKeyG) return '';
+    const parts = String(row[skuNameKeyG] ?? '').split(',');
+    return parts.length >= 3 ? parts[parts.length - 2].trim() : '';
+  }
+
+  function itemFor(gc, name){
+    if(!imgDB) return null;
+    return imgDB.items[gc] || (name ? imgDB.bySlug[slugify(name)] : null) || null;
+  }
+
+  // pilih warna website yang paling cocok dengan singkatan warna toko; null bila tidak yakin
+  function pickColor(item, abbr){
+    const names = Object.keys((item && item.c) || {});
+    if(!names.length) return null;
+    if(names.length === 1) return names[0];
+    const a = normColor(abbr);
+    if(!a) return null;
+    const nn = names.map(n => ({n, k: normColor(n)}));
+    const only = list => list.length === 1 ? list[0].n : null;
+    let hit = only(nn.filter(x => x.k === a)); if(hit) return hit;
+    const al = (COLOR_ALIASES[a] || []).map(normColor);
+    hit = only(nn.filter(x => al.includes(x.k))); if(hit) return hit;
+    hit = only(nn.filter(x => x.k.startsWith(a))); if(hit) return hit;
+    return only(nn.filter(x => x.k[0] === a[0] && isSubseq(a, x.k)));
+  }
+
+  function imgInfo(gc, abbr, name){
+    const item = itemFor(gc, name);
+    if(!item) return null;
+    const colorName = pickColor(item, abbr);
+    const file = (colorName && item.c && item.c[colorName]) || item.d || null;
+    if(!safeFile(file)) return null;
+    const base = imgDB.base;
+    return {item, file, colorName, thumb: base + 'small/' + file, full: base + file};
+  }
+
+  function thumbHtml(gc, name, abbr){
+    const info = imgInfo(gc, abbr, name);
+    const attrs = `data-gc="${escapeAttr(gc)}" data-name="${escapeAttr(name)}" data-color="${escapeAttr(abbr || '')}"`;
+    if(info){
+      return `<button type="button" class="thumb" ${attrs} aria-label="Lihat foto ${escapeAttr(name)}"><img class="thumb-img" src="${escapeAttr(info.thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></button>`;
+    }
+    return `<button type="button" class="thumb noimg" ${attrs} aria-label="Foto ${escapeAttr(name)} belum tersedia" title="Foto belum tersedia">${PLACEHOLDER}</button>`;
+  }
+
+  function applyImageDB(json){
+    if(!json || typeof json !== 'object' || !json.items || typeof json.items !== 'object') throw new Error('Format gambar.json tidak dikenali');
+    const bySlug = {};
+    Object.keys(json.items).forEach(k => { const it = json.items[k]; if(it && it.u) bySlug[it.u] = it; });
+    imgDB = {
+      base: (typeof json.base === 'string' && /^https:\/\//.test(json.base)) ? json.base : IMG_BASE_DEFAULT,
+      items: json.items, bySlug: bySlug, generated: json.generated || ''
+    };
+    imgState = 'ok';
+  }
+
+  async function loadImageDB(){
+    try{
+      const res = await fetch('gambar.json?t=' + Date.now(), {cache: 'no-store'});
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      applyImageDB(await res.json());
+    }catch(e){
+      imgDB = null; imgState = 'missing';
+    }
+    onImagesChanged();
+  }
+
+  function onImagesChanged(){
+    updateFotoBar();
+    if(summaryRows.length && resultsArea.style.display !== 'none') renderTable();
+  }
+
+  function updateFotoBar(){
+    const bar = document.getElementById('fotoBar');
+    const txt = document.getElementById('fotoBarText');
+    const btn = document.getElementById('fotoBtn');
+    bar.classList.toggle('ok', imgState === 'ok');
+    if(imgState === 'ok'){
+      const have = summaryRows.filter(r => imgInfo(r.genericCode, '', String(r.sampleName).split(',')[0].trim())).length;
+      txt.innerHTML = `<b>Foto produk aktif</b> &middot; ${fmtNum(have)} dari ${fmtNum(summaryRows.length)} generic di daftar ini punya foto`;
+      btn.textContent = 'Perbarui foto';
+    } else if(imgState === 'loading'){
+      txt.textContent = 'Memeriksa foto produk\u2026';
+      btn.textContent = 'Aktifkan foto';
+    } else {
+      txt.innerHTML = '<b>Foto produk belum aktif.</b> File gambar.json belum ada di folder tools ini.';
+      btn.textContent = 'Aktifkan foto';
+    }
+  }
+
+  // ----- modal (dipakai lightbox & panduan foto) -----
+  let openModalEl = null, lbTrigger = null, lbCtx = null;
+  function openModal(el){
+    openModalEl = el;
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    const x = el.querySelector('.modal-x');
+    if(x) x.focus();
+  }
+  function closeModal(){
+    if(!openModalEl) return;
+    openModalEl.classList.remove('open');
+    openModalEl = null;
+    document.body.style.overflow = '';
+    if(lbTrigger && document.contains(lbTrigger)) lbTrigger.focus();
+    lbTrigger = null;
+  }
+
+  // ----- lightbox foto -----
+  function openLightbox(gc, name, abbr, trigger){
+    lbTrigger = trigger || null;
+    const item = itemFor(gc, name);
+    lbCtx = {gc, name, abbr, item, active: item ? (pickColor(item, abbr) || defaultColor(item)) : null};
+    renderLightbox();
+    openModal(document.getElementById('lb'));
+  }
+  function defaultColor(item){
+    const names = Object.keys(item.c || {});
+    return names.find(n => item.c[n] === item.d) || names[0] || null;
+  }
+  function renderLightbox(){
+    const {gc, name, abbr, item, active} = lbCtx;
+    document.getElementById('lbTitle').textContent = (item && item.n) || name || gc;
+    document.getElementById('lbSub').innerHTML = 'Generic <b>' + escapeHtml(gc) + '</b>' + (abbr ? ' &middot; warna di toko: <b>' + escapeHtml(abbr) + '</b>' : '');
+    const box = document.getElementById('lbImg');
+    const file = item ? ((active && item.c && item.c[active]) || item.d || null) : null;
+    if(safeFile(file)){
+      box.innerHTML = '<img alt="" referrerpolicy="no-referrer">';
+      const im = box.querySelector('img');
+      im.alt = (item.n || name || '') + (active ? ' ' + active : '');
+      im.addEventListener('error', () => { box.innerHTML = '<div class="lb-none">Foto tidak bisa dimuat. Coba buka lewat tombol di samping.</div>'; });
+      im.src = imgDB.base + file;
+    } else {
+      box.innerHTML = '<div class="lb-none">Foto belum tersedia untuk generic ini.<br>Mungkin produknya belum dijual di website, atau namanya berbeda.</div>';
+    }
+    const names = item ? Object.keys(item.c || {}) : [];
+    const wrap = document.getElementById('lbColorsWrap');
+    wrap.hidden = names.length === 0;
+    if(names.length){
+      const matched = pickColor(item, abbr);
+      document.getElementById('lbColors').innerHTML = names.map(n =>
+        `<button type="button" class="lb-chip ${(abbr && names.length > 1 && n === matched) ? 'match' : ''}" data-color-name="${escapeAttr(n)}" aria-pressed="${n === active}">${escapeHtml(n)}</button>`).join('');
+      let note = '';
+      if(abbr && names.length === 1) note = 'Foto referensi dari website, warna bisa berbeda dengan barang di toko.';
+      else if(abbr && matched) note = 'Warna yang cocok dengan "' + abbr + '" dipilih otomatis (ditandai lingkaran oranye).';
+      else if(abbr) note = 'Warna "' + abbr + '" tidak bisa dikenali otomatis, pilih manual di atas.';
+      document.getElementById('lbNote').textContent = note;
+    }
+    const link = document.getElementById('lbLink');
+    const slug = (item && item.u) || slugify(name);
+    link.href = SITE + '/d/' + slug + (active ? '?color=' + encodeURIComponent(active.toLowerCase()).replace(/%20/g, '+') : '');
+    link.textContent = (item ? 'Buka di eigeradventure.com' : 'Coba cari di eigeradventure.com') + ' \u2197';
+  }
+
+  // ----- panduan + pembuat gambar.json -----
+  // Fungsi ini dijalankan di console browser pada halaman eigeradventure.com (bukan di tools ini).
+  // Harus berdiri sendiri: isinya disalin utuh (toString) ke clipboard.
+  async function gambarCollector(LIST){
+    if(!/(^|\.)eigeradventure\.com$/.test(location.hostname)){
+      alert('Kode ini harus dijalankan di halaman https://www.eigeradventure.com (bukan di halaman tools). Buka eigeradventure.com, lalu tempel kodenya lagi.');
+      return;
+    }
+    var CONC = 3, DELAY = 120;
+    var slugify = function(n){ return String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); };
+    var RE_FILE = /product\/variant\/media\/web\/(?:(?:small|thumbnail)\/)?([A-Za-z0-9_-]+\.(?:webp|jpe?g|png))/;
+    var fileOf = function(u){ var m = RE_FILE.exec(u || ''); return m ? m[1] : null; };
+    var groups = new Map();
+    LIST.forEach(function(row){
+      var gc = String(row[0]), name = String(row[1]), s = slugify(name);
+      if(!s) return;
+      if(!groups.has(s)) groups.set(s, {name: name, gcs: []});
+      groups.get(s).gcs.push(gc);
+    });
+    var jobs = Array.from(groups.entries());
+    var items = {}, misses = [], mismatches = [], diag = [];
+    var done = 0, found = 0, stop = false, blocked = 0;
+
+    var box = document.createElement('div');
+    Object.assign(box.style, {position:'fixed', top:'12px', right:'12px', zIndex:'2147483647', background:'#0B1B4A', color:'#fff', font:'600 13px/1.45 system-ui,sans-serif', padding:'12px 14px', borderRadius:'10px', boxShadow:'0 8px 24px rgba(0,0,0,.35)', maxWidth:'330px'});
+    var msg = document.createElement('div');
+    var btn = document.createElement('button');
+    btn.textContent = 'Berhenti & unduh sekarang';
+    Object.assign(btn.style, {marginTop:'8px', padding:'6px 10px', border:'0', borderRadius:'6px', background:'#E46636', color:'#fff', font:'700 12px system-ui,sans-serif', cursor:'pointer'});
+    btn.onclick = function(){ stop = true; };
+    box.appendChild(msg); box.appendChild(btn); document.body.appendChild(box);
+    var upd = function(){ msg.textContent = 'Mengambil foto produk\u2026 ' + done + '/' + jobs.length + ' \u00b7 ditemukan ' + found + ' \u00b7 tidak ketemu ' + misses.length; };
+    upd();
+
+    function parse(html){
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var sku = null;
+      // kumpulkan teks tampilan; pisahkan antar-elemen dengan spasi supaya "SKU" tidak menempel ke teks lain
+      var parts = [];
+      if(doc.body){
+        var tw = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+        while(tw.nextNode()){
+          var par = tw.currentNode.parentNode;
+          if(par && /^(SCRIPT|STYLE|NOSCRIPT)$/i.test(par.nodeName)) continue;
+          var v = tw.currentNode.nodeValue.trim();
+          if(v) parts.push(v);
+        }
+      }
+      var text = parts.join(' ');
+      var m = text.match(/\bSKU\s*[:#]?\s*(\d{6,})/);
+      if(m) sku = m[1];
+      if(!sku){ m = html.match(/"sku"\s*:\s*"(\d{9})"/i); if(m) sku = m[1]; }
+      var h1 = doc.querySelector('h1');
+      var pname = h1 ? h1.textContent.trim() : '';
+      var colors = {}, def = null, nImg = 0;
+      doc.querySelectorAll('img').forEach(function(img){
+        var cands = [img.getAttribute('src'), img.getAttribute('data-src'), img.getAttribute('srcset')];
+        var f = null, src = '';
+        for(var i = 0; i < cands.length && !f; i++){ f = fileOf(cands[i]); if(f) src = cands[i]; }
+        if(!f) return;
+        nImg++;
+        var alt = (img.getAttribute('alt') || '').trim();
+        if(!alt || /^varian\b/i.test(alt)) return;
+        var color = alt.replace(/-\d+$/, '').trim().toUpperCase();
+        if(!color || color === pname.toUpperCase() || color.length > 30) return;
+        var big = !/\/web\/(?:small|thumbnail)\//.test(src);
+        if(!colors[color]) colors[color] = f;
+        if(big && /-0$/.test(alt) && !def) def = f;
+      });
+      if(!def){ var og = doc.querySelector('meta[property="og:image"]'); def = fileOf(og && og.getAttribute('content')); }
+      if(!def){ var k0 = Object.keys(colors)[0]; if(k0) def = colors[k0]; }
+      Object.keys(colors).slice(12).forEach(function(k){ delete colors[k]; });
+      return {sku: sku, pname: pname, colors: colors, def: def, nImg: nImg};
+    }
+
+    async function one(job){
+      var slug = job[0], g = job[1], res;
+      try{ res = await fetch('/d/' + slug, {credentials: 'same-origin'}); }
+      catch(e){ misses.push(g.name); diag.push({slug: slug, status: 'error'}); return; }
+      if(res.status === 429 || res.status === 403){ blocked++; misses.push(g.name); diag.push({slug: slug, status: res.status}); return; }
+      if(!res.ok){ misses.push(g.name); diag.push({slug: slug, status: res.status}); return; }
+      var p = parse(await res.text());
+      if(!p.sku || (!p.def && !Object.keys(p.colors).length)){
+        misses.push(g.name); diag.push({slug: slug, status: res.status, skuDitemukan: p.sku, jumlahGambar: p.nImg}); return;
+      }
+      if(g.gcs.indexOf(p.sku) < 0) mismatches.push({nama: g.name, kodeToko: g.gcs.join(','), skuWebsite: p.sku});
+      items[p.sku] = {n: p.pname || g.name, u: slug, d: p.def || null, c: p.colors};
+      found++;
+    }
+
+    var idx = 0;
+    async function worker(){
+      while(!stop){
+        var i = idx++;
+        if(i >= jobs.length) break;
+        await one(jobs[i]);
+        done++; upd();
+        if(blocked >= 5){ stop = true; }
+        await new Promise(function(r){ setTimeout(r, DELAY); });
+      }
+    }
+    await Promise.all(Array.from({length: CONC}, worker));
+
+    var out = {v: 1, generated: new Date().toISOString(), base: 'https://d1yutv2xslo29o.cloudfront.net/product/variant/media/web/', items: items};
+    window.__gambarHasil = {out: out, misses: misses, mismatches: mismatches, diag: diag};
+    console.log('Foto ditemukan:', found, '| tidak ketemu:', misses.length, '| SKU website beda dengan kode toko:', mismatches.length);
+    if(mismatches.length) console.table(mismatches.slice(0, 20));
+    if(misses.length) console.log('Contoh produk tidak ketemu:', misses.slice(0, 30));
+    if(diag.length) console.table(diag.slice(0, 10));
+    btn.textContent = 'Tutup';
+    btn.onclick = function(){ box.remove(); };
+    if(found > 0){
+      var blob = new Blob([JSON.stringify(out)], {type: 'application/json'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'gambar.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      msg.textContent = (blocked >= 5 ? 'Website membatasi akses, hasil parsial. ' : 'Selesai. ') + 'Ditemukan ' + found + ', tidak ketemu ' + misses.length + ', SKU berbeda ' + mismatches.length + '. File gambar.json terunduh.';
+    } else {
+      msg.textContent = 'Tidak ada foto yang berhasil dibaca. Buka Console untuk melihat rincian, lalu kabari Claude.';
+    }
+    return out;
+  }
+
+  function buildCollectorCode(){
+    return '(' + gambarCollector.toString() + ')(' + JSON.stringify(exportProducts) + ');';
+  }
+
+  function openFotoModal(){
+    document.getElementById('fotoCount').textContent = fmtNum(exportProducts.length);
+    document.getElementById('fotoModalStatus').innerHTML = imgState === 'ok'
+      ? `Foto aktif untuk ${fmtNum(Object.keys(imgDB.items).length)} produk${imgDB.generated ? ' (dibuat ' + escapeHtml(String(imgDB.generated).slice(0, 10)) + ')' : ''}. Ulangi langkah di bawah kalau ada produk baru yang belum punya foto.`
+      : 'Foto produk diambil dari eigeradventure.com dan dicocokkan lewat Generic Code. Langkah di bawah cukup dilakukan sekali, lalu diulang kalau ada produk baru.';
+    document.getElementById('fotoCode').value = buildCollectorCode();
+    document.getElementById('fotoCopyOk').hidden = true;
+    openModal(document.getElementById('fotoModal'));
+  }
+
+  async function copyCollectorCode(){
+    const ta = document.getElementById('fotoCode');
+    try{
+      await navigator.clipboard.writeText(ta.value);
+    }catch(e){
+      ta.closest('details').open = true;
+      ta.select();
+      document.execCommand('copy');
+    }
+    document.getElementById('fotoCopyOk').hidden = false;
+  }
+
+  // ===== Tab =====
+  function switchTab(name){
+    document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+    document.getElementById('panelArtikel').hidden = name !== 'artikel';
+    document.getElementById('panelAnalisa').hidden = name !== 'analisa';
+  }
+
+  // ===== Analisa % terdisplay per MC =====
+  const anWrap = document.getElementById('anTableWrap');
+  const anMc2 = document.getElementById('anMc2');
+  const anStatus = document.getElementById('anStatus');
+  const anSortSel = document.getElementById('anSortSel');
+  const anSearch = document.getElementById('anSearch');
+  const mcName = v => (!v || v === '-') ? '(tanpa MC)' : v;
+  const fmtPct = p => (p >= 100 ? '100%' : p.toFixed(1).replace('.', ',') + '%');
+  const fmtNum = n => Number(n).toLocaleString('id-ID');
+
+  function buildGroups(level){
+    const map = new Map();
+    analysisRows.forEach(r => {
+      let key;
+      if(anMerge) key = level === 'mc3' ? r.mc3 : [r.mc3, r.mc4].join('\u0001');
+      else key = level === 'mc3' ? [r.mc2, r.mc3].join('\u0001') : [r.mc2, r.mc3, r.mc4].join('\u0001');
+      let g = map.get(key);
+      if(!g){
+        g = {mc2: anMerge ? null : r.mc2, mc2s: new Set(), mc3:r.mc3, mc4: level === 'mc4' ? r.mc4 : null, wh:0, shown:0, miss:0, missQty:0};
+        map.set(key, g);
+      }
+      g.mc2s.add(r.mc2);
+      g.wh++;
+      if(r.shown) g.shown++; else { g.miss++; g.missQty += r.qty; }
+    });
+    return [...map.values()].map(g => {
+      g.pct = g.wh ? (g.shown / g.wh) * 100 : 100;
+      g.reached = g.shown * 100 >= g.wh * DISPLAY_TARGET;
+      g.need = Math.max(0, Math.ceil(g.wh * DISPLAY_TARGET / 100 - 1e-9) - g.shown);
+      g.name = level === 'mc3' ? mcName(g.mc3) : mcName(g.mc4);
+      return g;
+    });
+  }
+
+  function populateAnMc2(){
+    const cur = anMc2.value;
+    const counts = {};
+    analysisRows.forEach(r => { counts[r.mc2] = (counts[r.mc2] || 0) + 1; });
+    const keys = Object.keys(counts).sort((a,b) => a.localeCompare(b));
+    anMc2.innerHTML = '<option value="">Semua MC LV 2</option>' +
+      keys.map(k => `<option value="${escapeAttr(k)}">${escapeHtml(mcName(k))} (${counts[k]})</option>`).join('');
+    anMc2.value = keys.includes(cur) ? cur : '';
+  }
+
+  function syncAnControls(){
+    document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.level === anLevel)));
+    const v = anSort.key + ':' + anSort.dir;
+    if([...anSortSel.options].some(o => o.value === v)) anSortSel.value = v;
+  }
+
+  let anShown = [];
+  function renderAnalysis(){
+    if(!analysisRows.length){
+      anWrap.innerHTML = '<div class="empty-state"><div class="big">Belum ada data</div>Tidak ada generic ber-stok di Warehouse.</div>';
+      document.getElementById('anKpis').innerHTML = '';
+      document.getElementById('anCount').innerHTML = '';
+      return;
+    }
+    const mc2f = anMerge ? '' : anMc2.value;
+    const levelLabel = anLevel === 'mc3' ? 'MC LV 3' : 'MC LV 4';
+    let groups = buildGroups(anLevel).filter(g => !mc2f || g.mc2 === mc2f);
+
+    // KPI mengikuti filter MC LV 2
+    const scoped = analysisRows.filter(r => !mc2f || r.mc2 === mc2f);
+    const scopedShown = scoped.filter(r => r.shown).length;
+    const overall = scoped.length ? (scopedShown / scoped.length) * 100 : 100;
+    const reachedN = groups.filter(g => g.reached).length;
+    const belowN = groups.length - reachedN;
+    const lowest = groups.filter(g => !g.reached).sort((a,b) => a.pct - b.pct || b.miss - a.miss)[0];
+    document.getElementById('anKpis').innerHTML = `
+      <div class="kpi ${overall >= DISPLAY_TARGET ? 'good' : ''}"><div class="k-num">${fmtPct(overall)}</div><div class="k-lbl">Display ${mc2f ? escapeHtml(mcName(mc2f)) : 'keseluruhan'} &middot; ${fmtNum(scopedShown)} dari ${fmtNum(scoped.length)} generic</div></div>
+      <div class="kpi good"><div class="k-num">${reachedN} <span style="font-size:15px;font-weight:700;">dari ${groups.length}</span></div><div class="k-lbl">${levelLabel} sudah capai target ${DISPLAY_TARGET}%</div></div>
+      <div class="kpi ${belowN ? 'warn' : 'good'}"><div class="k-num">${belowN}</div><div class="k-lbl">${levelLabel} di bawah target${lowest ? ' &middot; terendah: ' + escapeHtml(lowest.name) + ' ' + fmtPct(lowest.pct) : ''}</div></div>`;
+
+    // filter status + pencarian
+    const st = anStatus.value, q = anSearch.value.trim().toLowerCase();
+    groups = groups.filter(g =>
+      (!st || (st === 'below' ? !g.reached : g.reached)) &&
+      (!q || [g.mc2 === null ? [...g.mc2s].map(mcName).join(' ') : mcName(g.mc2), mcName(g.mc3), g.mc4 === null ? '' : mcName(g.mc4)].join(' ').toLowerCase().includes(q))
+    );
+
+    // urutkan
+    const {key, dir} = anSort;
+    const mul = dir === 'asc' ? 1 : -1;
+    groups.sort((a,b) => {
+      let c;
+      if(key === 'name') c = a.name.localeCompare(b.name);
+      else if(key === 'qty') c = a.missQty - b.missQty;
+      else c = a[key] - b[key];
+      if(c === 0) c = key === 'pct' ? (b.miss - a.miss) : a.name.localeCompare(b.name);
+      return c * mul;
+    });
+    anShown = groups;
+
+    const tot = groups.reduce((a,g) => ({wh:a.wh+g.wh, shown:a.shown+g.shown, miss:a.miss+g.miss, qty:a.qty+g.missQty}), {wh:0, shown:0, miss:0, qty:0});
+    const totPct = tot.wh ? (tot.shown / tot.wh) * 100 : 0;
+    document.getElementById('anCount').innerHTML =
+      `Menampilkan <strong>${groups.length}</strong> ${levelLabel} &middot; ${fmtNum(tot.wh)} generic, ${fmtNum(tot.shown)} sudah terdisplay (<strong>${tot.wh ? fmtPct(totPct) : '-'}</strong>)`;
+
+    if(!groups.length){
+      anWrap.innerHTML = '<div class="empty-state"><div class="big">Tidak ada hasil</div>Coba ubah filter, status, atau kata kunci pencarian.</div>';
+      return;
+    }
+
+    const arrow = k => `<span class="arrow">${anSort.key === k ? (anSort.dir === 'asc' ? '&#9650;' : '&#9660;') : '&#8693;'}</span>`;
+    const rowsHtml = groups.map((g, i) => {
+      const lvl = g.reached ? 'ok' : (g.pct >= 80 ? 'mid' : 'low');
+      const lv2s = [...g.mc2s].map(mcName).sort((a,b) => a.localeCompare(b));
+      let sub;
+      if(anMerge) sub = anLevel === 'mc3' ? escapeHtml(lv2s.join(' \u00B7 ')) : escapeHtml(mcName(g.mc3));
+      else sub = anLevel === 'mc3' ? escapeHtml(mcName(g.mc2)) : escapeHtml(mcName(g.mc2)) + ' &rsaquo; ' + escapeHtml(mcName(g.mc3));
+      const hint = g.reached ? 'tercapai' : 'butuh ' + g.need + ' lagi';
+      return `<tr class="an-row lvl-${lvl}">
+        <td class="a-name"><div class="a-title">${escapeHtml(g.name)}</div><div class="a-sub">${sub}</div></td>
+        <td class="num-cell a-wh" data-l="Di gudang">${fmtNum(g.wh)}</td>
+        <td class="num-cell a-shown" data-l="Terdisplay">${fmtNum(g.shown)}</td>
+        <td class="num-cell a-miss" data-l="Belum">${fmtNum(g.miss)}</td>
+        <td class="a-pct"><div class="pct-line"><b>${fmtPct(g.pct)}</b><span class="hint">${hint}</span></div><div class="mini-bar"><i style="width:${Math.min(100, g.pct)}%"></i><u></u></div></td>
+        <td class="num-cell a-qty" data-l="Qty belum">${fmtNum(g.missQty)}</td>
+        <td class="a-act"><button type="button" class="link-btn" data-i="${i}" ${g.miss ? '' : 'disabled'}>Lihat artikel &rarr;</button></td>
+      </tr>`;
+    }).join('');
+
+    anWrap.innerHTML = `<div class="table-scroll an-wrap"><table class="an-table">
+      <thead><tr>
+        <th data-ansort="name">${levelLabel} ${arrow('name')}</th>
+        <th data-ansort="wh" style="text-align:right">Generic di Gudang ${arrow('wh')}</th>
+        <th data-ansort="shown" style="text-align:right">Sudah Terdisplay ${arrow('shown')}</th>
+        <th data-ansort="miss" style="text-align:right">Belum Terdisplay ${arrow('miss')}</th>
+        <th data-ansort="pct">% Terdisplay ${arrow('pct')}</th>
+        <th data-ansort="qty" style="text-align:right">Qty Belum Terdisplay ${arrow('qty')}</th>
+        <th></th>
+      </tr></thead>
+      <tbody>${rowsHtml}</tbody>
+      <tfoot><tr>
+        <td>Total (${groups.length} ${levelLabel})</td>
+        <td class="num-cell">${fmtNum(tot.wh)}</td>
+        <td class="num-cell">${fmtNum(tot.shown)}</td>
+        <td class="num-cell">${fmtNum(tot.miss)}</td>
+        <td>${fmtPct(totPct)}</td>
+        <td class="num-cell">${fmtNum(tot.qty)}</td>
+        <td></td>
+      </tr></tfoot>
+    </table></div>`;
+  }
+
+  // Lompat ke tab Artikel dengan filter MC yang dipilih
+  function openArticles(g){
+    LEVELS.forEach(l => selected[l].clear());
+    if(g.mc2 !== null) selected.mc2.add(g.mc2);
+    selected.mc3.add(g.mc3);
+    if(g.mc4 !== null) selected.mc4.add(g.mc4);
+    searchInput.value = '';
+    openRows = new Set();
+    refreshFilterOptions();
+    renderTable();
+    switchTab('artikel');
+    requestAnimationFrame(() => document.querySelector('.toolbar').scrollIntoView({behavior:'smooth', block:'start'}));
+  }
+
+  function exportAnalysis(){
+    if(!analysisRows.length){ alert('Tidak ada data untuk diexport.'); return; }
+    const wb = XLSX.utils.book_new();
+    [['mc3','Analisa MC LV 3'], ['mc4','Analisa MC LV 4']].forEach(([level, sheetName]) => {
+      const groups = buildGroups(level).sort((a,b) => a.pct - b.pct || b.miss - a.miss);
+      const data = groups.map(g => {
+        const o = {};
+        if(!anMerge) o['MC LV 2'] = mcName(g.mc2);
+        o['MC LV 3'] = mcName(g.mc3);
+        if(level === 'mc4') o['MC LV 4'] = mcName(g.mc4);
+        o['Generic di Gudang'] = g.wh;
+        o['Sudah Terdisplay'] = g.shown;
+        o['Belum Terdisplay'] = g.miss;
+        o['% Terdisplay'] = g.wh ? g.shown / g.wh : 0;
+        o['Status vs Target ' + DISPLAY_TARGET + '%'] = g.reached ? 'Tercapai' : 'Di bawah target';
+        o['Butuh Generic Lagi'] = g.need;
+        o['Qty Belum Terdisplay (Available)'] = g.missQty;
+        return o;
+      });
+      const ws = XLSX.utils.json_to_sheet(data);
+      const cols = Object.keys(data[0] || {});
+      const pctCol = cols.indexOf('% Terdisplay');
+      if(pctCol >= 0) data.forEach((_, i) => {
+        const cell = ws[XLSX.utils.encode_cell({r: i + 1, c: pctCol})];
+        if(cell) cell.z = '0.0%';
+      });
+      ws['!cols'] = cols.map(c => ({wch: Math.max(14, c.length + 2)}));
+      XLSX.utils.book_append_sheet(wb, ws, sheetName);
+    });
+    XLSX.writeFile(wb, anMerge ? 'Analisa_Display_per_MC_tanpa_LV2.xlsx' : 'Analisa_Display_per_MC.xlsx');
   }
 
   // ===== Progres display + pesan semangat =====
@@ -1060,10 +1939,12 @@
 
     const arrow = (key) => sortState.key === key ? `<span class="arrow">${sortState.dir === 'asc' ? '▲' : '▼'}</span>` : `<span class="arrow">↕</span>`;
 
-    let html = `<div class="table-scroll"><table>
+    const showFoto = imgState === 'ok';
+    let html = `<div class="table-scroll"><table class="${showFoto ? 'has-foto' : ''}">
       <thead>
         <tr>
           <th style="width:24px;"></th>
+          ${showFoto ? '<th class="th-foto">Foto</th>' : ''}
           <th data-sort="genericCode">Generic Code ${arrow('genericCode')}</th>
           <th data-sort="sampleName">Contoh Nama SKU ${arrow('sampleName')}</th>
           <th data-sort="mc2">MC LV 2 ${arrow('mc2')}</th>
@@ -1078,20 +1959,24 @@
 
     rows.forEach(r => {
       const isOpen = openRows.has(r.genericCode);
+      const pname = String(r.sampleName).split(',')[0].trim();
+      const abbr = r.colors.length === 1 ? r.colors[0] : '';
       html += `<tr class="main-row ${isOpen ? 'is-open':''}" data-gc="${escapeAttr(r.genericCode)}">
         <td class="c-caret"><span class="caret ${isOpen ? 'open':''}">&#9656;</span></td>
+        ${showFoto ? `<td class="c-foto">${thumbHtml(r.genericCode, pname, abbr)}</td>` : ''}
         <td class="mono c-gc">${escapeHtml(r.genericCode)}</td>
         <td class="name-cell c-name">${escapeHtml(r.sampleName)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc2)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc3)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc4)}</td>
+        <td class="c-mcm" aria-hidden="true"><span>${escapeHtml(r.mc2)}</span><span>${escapeHtml(r.mc3)}</span><span>${escapeHtml(r.mc4)}</span></td>
         <td class="c-break" aria-hidden="true"></td>
         <td class="num-cell c-sku">${r.skuCount}</td>
         <td class="num-cell c-qty">${r.totalQty}</td>
         <td class="mono c-bin">${escapeHtml(r.binCodes)}</td>
       </tr>`;
       html += `<tr class="detail-row ${isOpen ? 'open':''}" data-detail-for="${escapeAttr(r.genericCode)}">
-        <td colspan="9"><div class="detail-inner">${renderDetailTable(r.genericCode)}</div></td>
+        <td colspan="${showFoto ? 10 : 9}"><div class="detail-inner">${renderDetailTable(r.genericCode)}</div></td>
       </tr>`;
     });
 
@@ -1111,7 +1996,8 @@
     });
 
     tableWrap.querySelectorAll('.main-row').forEach(tr => {
-      tr.addEventListener('click', () => {
+      tr.addEventListener('click', (e) => {
+        if(e.target.closest('.thumb')) return;   // klik foto = buka foto, bukan buka detail
         const gc = tr.getAttribute('data-gc');
         if(openRows.has(gc)) openRows.delete(gc); else openRows.add(gc);
         renderTable();
@@ -1123,9 +2009,15 @@
     const rows = detailByGeneric[gc] || [];
     if(!rows.length) return '<em>Tidak ada detail baris.</em>';
     const cols = allColumns.length ? allColumns : Object.keys(rows[0]);
-    let html = '<table><thead><tr>' + cols.map(c => `<th>${escapeHtml(c)}</th>`).join('') + '</tr></thead><tbody>';
+    const showFoto = imgState === 'ok';
+    let html = '<table><thead><tr>' + (showFoto ? '<th>Foto</th>' : '') + cols.map(c => `<th>${escapeHtml(c)}</th>`).join('') + '</tr></thead><tbody>';
     rows.forEach(r => {
-      html += '<tr>' + cols.map(c => `<td class="mono" data-label="${escapeAttr(c)}"><span class="v">${escapeHtml(r[c] ?? '')}</span></td>`).join('') + '</tr>';
+      let foto = '';
+      if(showFoto){
+        const nm = skuNameKeyG ? String(r[skuNameKeyG] ?? '') : '';
+        foto = `<td class="d-foto" data-label="Foto">${thumbHtml(gc, nm.split(',')[0].trim(), skuColor(r))}</td>`;
+      }
+      html += '<tr>' + foto + cols.map(c => `<td class="mono" data-label="${escapeAttr(c)}"><span class="v">${escapeHtml(r[c] ?? '')}</span></td>`).join('') + '</tr>';
     });
     html += '</tbody></table>';
     return html;
@@ -1202,10 +2094,93 @@
     resultsArea.style.display = 'none';
     clearError();
     summaryRows = [];
+    analysisRows = [];
     detailByGeneric = {};
   });
 
   searchInput.addEventListener('input', renderTable);
+
+  // --- foto produk ---
+  tableWrap.addEventListener('click', (e) => {
+    const t = e.target.closest('.thumb');
+    if(t) openLightbox(t.dataset.gc, t.dataset.name, t.dataset.color, t);
+  });
+  tableWrap.addEventListener('error', (e) => {
+    const im = e.target;
+    if(!(im instanceof HTMLImageElement) || !im.classList.contains('thumb-img')) return;
+    const t = im.closest('.thumb');
+    if(t){ t.classList.add('noimg'); t.innerHTML = PLACEHOLDER; }
+  }, true);
+  document.getElementById('lbColors').addEventListener('click', (e) => {
+    const b = e.target.closest('.lb-chip');
+    if(!b || !lbCtx) return;
+    lbCtx.active = b.dataset.colorName;
+    renderLightbox();
+  });
+  document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', (e) => {
+    if(e.target === m || e.target.closest('[data-close]')) closeModal();
+  }));
+  document.addEventListener('keydown', (e) => {
+    if(!openModalEl) return;
+    if(e.key === 'Escape'){ closeModal(); return; }
+    if(e.key === 'Tab'){
+      const f = [...openModalEl.querySelectorAll('button, a[href], input:not([type=hidden]), textarea, summary')].filter(x => !x.disabled && x.offsetParent !== null);
+      if(!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+  document.getElementById('fotoBtn').addEventListener('click', openFotoModal);
+  document.getElementById('fotoCopyBtn').addEventListener('click', copyCollectorCode);
+  document.getElementById('fotoLoadBtn').addEventListener('click', () => document.getElementById('fotoFile').click());
+  document.getElementById('fotoFile').addEventListener('change', async (e) => {
+    const f = e.target.files && e.target.files[0];
+    if(!f) return;
+    try{
+      applyImageDB(JSON.parse(await f.text()));
+      onImagesChanged();
+      document.getElementById('fotoModalStatus').innerHTML = `<b>gambar.json dimuat</b> (${fmtNum(Object.keys(imgDB.items).length)} produk). Ini hanya berlaku di sesi ini; upload ke GitHub supaya permanen.`;
+    }catch(err){
+      document.getElementById('fotoModalStatus').textContent = 'File tidak bisa dibaca: ' + err.message;
+    }
+    e.target.value = '';
+  });
+
+  // --- tab & analisa ---
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+  document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+    anLevel = b.dataset.level;
+    syncAnControls();
+    renderAnalysis();
+  }));
+  anMc2.addEventListener('change', renderAnalysis);
+  document.getElementById('anMerge').addEventListener('change', (e) => {
+    anMerge = e.target.checked;
+    anMc2.disabled = anMerge;
+    renderAnalysis();
+  });
+  anStatus.addEventListener('change', renderAnalysis);
+  anSearch.addEventListener('input', renderAnalysis);
+  anSortSel.addEventListener('change', () => {
+    const [key, dir] = anSortSel.value.split(':');
+    anSort = {key, dir};
+    renderAnalysis();
+  });
+  document.getElementById('anExportBtn').addEventListener('click', exportAnalysis);
+  anWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('.link-btn');
+    if(btn && !btn.disabled){ openArticles(anShown[parseInt(btn.dataset.i, 10)]); return; }
+    const th = e.target.closest('th[data-ansort]');
+    if(th){
+      const k = th.dataset.ansort;
+      anSort = (anSort.key === k)
+        ? {key:k, dir: anSort.dir === 'asc' ? 'desc' : 'asc'}
+        : {key:k, dir: (k === 'name') ? 'asc' : (k === 'pct' ? 'asc' : 'desc')};
+      syncAnControls();
+      renderAnalysis();
+    }
+  });
 
   resetFilterBtn.addEventListener('click', () => {
     LEVELS.forEach(l => selected[l].clear());
@@ -1245,6 +2220,7 @@
     XLSX.writeFile(wb, 'Barang_Belum_Terdisplay' + (tag ? '_' + tag : '') + '.xlsx');
   });
 
+  loadImageDB();
 })();
 </script>
 </body>
