@@ -694,7 +694,10 @@
     const skuCodeKey = findKey(headerMap, ['SKU Code','SKUCode']);
     const skuNameKey = findKey(headerMap, ['SKU Name','SKUName']);
     const binKey = findKey(headerMap, ['Bin Code','BinCode']);
-    const qtyKey = findKey(headerMap, ['Total Qty','TotalQty','Qty']);
+    // Qty dihitung hanya dari kolom Available Qty
+    let qtyKey = findKey(headerMap, ['Available Qty','AvailableQty','Avail Qty','Available']);
+    const qtyFallback = !qtyKey;
+    if(qtyFallback) qtyKey = findKey(headerMap, ['Total Qty','TotalQty','Qty']);
     const mc2Key = findKey(headerMap, ['MC LV 2','MCLV2','MC Level 2']);
     const mc3Key = findKey(headerMap, ['MC LV 3','MCLV3','MC Level 3']);
     const mc4Key = findKey(headerMap, ['MC LV 4','MCLV4','MC Level 4']);
@@ -779,6 +782,12 @@
 
     const missing = [...warehouseSet].filter(gc => !salesAreaSet.has(gc));
     const viaSellingBin = [...warehouseSet].filter(gc => salesAreaSet.has(gc) && !zoneSaSet.has(gc)).length;
+    if(qtyFallback){
+      document.getElementById('excludeText').innerHTML +=
+        (exNote.classList.contains('show') ? '<br>' : '') +
+        `<b>Kolom Available Qty tidak ditemukan</b>, qty dihitung dari ${qtyKey ? escapeHtml(qtyKey) : 'kolom qty yang ada'}. Pastikan file export berisi kolom Available Qty.`;
+      exNote.classList.add('show');
+    }
     if(viaSellingBin){
       document.getElementById('excludeText').innerHTML +=
         (exNote.classList.contains('show') ? '<br>' : '') +
@@ -1043,7 +1052,7 @@
           <th data-sort="mc3">MC LV 3 ${arrow('mc3')}</th>
           <th data-sort="mc4">MC LV 4 ${arrow('mc4')}</th>
           <th data-sort="skuCount">Jml SKU ${arrow('skuCount')}</th>
-          <th data-sort="totalQty">Qty Warehouse ${arrow('totalQty')}</th>
+          <th data-sort="totalQty">Available Qty ${arrow('totalQty')}</th>
           <th data-sort="binCodes">Bin Code ${arrow('binCodes')}</th>
         </tr>
       </thead>
@@ -1200,7 +1209,7 @@
       'MC LV 3': r.mc3,
       'MC LV 4': r.mc4,
       'Jumlah SKU': r.skuCount,
-      'Total Qty (Warehouse)': r.totalQty,
+      'Available Qty (Warehouse)': r.totalQty,
       'Bin Code': r.binCodes,
     }));
     const wsDetailData = [];
