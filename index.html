@@ -441,19 +441,41 @@
   .modal-x:focus-visible{outline:3px solid var(--orange);outline-offset:2px;}
   .steps{margin:0 0 14px;padding-left:20px;font-size:13.5px;color:var(--ink);}
   .steps li{margin-bottom:6px;}
-  .steps code{font-family:'JetBrains Mono',monospace;background:var(--navy-tint);border-radius:4px;padding:1px 5px;font-size:12px;}
+  .steps code, .modal-box p code{font-family:'JetBrains Mono',monospace;background:var(--navy-tint);border-radius:4px;padding:1px 5px;font-size:12px;}
   .modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;align-items:center;}
-  .code-box{width:100%;height:120px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid var(--line-strong);border-radius:8px;padding:8px;color:var(--ink-soft);resize:vertical;}
-  details.code-d summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--navy);margin:6px 0;}
-  .copy-ok{color:var(--teal);font-weight:700;font-size:12.5px;}
+  .foto-prog{font-size:13px;font-weight:600;color:var(--navy);background:var(--navy-tint);border-radius:8px;padding:9px 12px;margin-top:4px;}
+  .foto-prog.err{color:#8A2F22;background:#FDECEB;}
 
-  .modal-box.lb-box{max-width:880px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:22px;padding:22px;}
+  .modal-box.lb-box{max-width:920px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:22px;padding:22px;}
+  .lb-left{min-width:0;}
   .lb-img{
-    background:#fff;border:1px solid var(--line);border-radius:12px;min-height:280px;
-    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;min-height:300px;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y;
   }
-  .lb-img img{max-width:100%;max-height:68vh;object-fit:contain;display:block;}
-  .lb-img .lb-none{padding:24px;text-align:center;color:var(--ink-soft);font-size:13px;}
+  .lb-stage{display:flex;align-items:center;justify-content:center;width:100%;}
+  .lb-stage img{max-width:100%;max-height:62vh;object-fit:contain;display:block;}
+  .lb-none{padding:24px;text-align:center;color:var(--ink-soft);font-size:13px;}
+  .lb-nav{
+    position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--navy);font-size:24px;line-height:1;
+    cursor:pointer;z-index:1;display:flex;align-items:center;justify-content:center;padding:0 0 3px;
+  }
+  .lb-nav:hover{background:var(--navy);color:#fff;}
+  .lb-nav:focus-visible{outline:3px solid var(--orange);outline-offset:2px;}
+  .lb-nav.prev{left:8px;} .lb-nav.next{right:8px;}
+  .lb-nav[hidden], .lb-count[hidden]{display:none;}
+  .lb-count{
+    position:absolute;bottom:8px;right:10px;background:rgba(11,27,74,.78);color:#fff;
+    font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 10px;
+  }
+  .lb-strip{display:flex;gap:6px;margin-top:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;}
+  .lb-strip button{
+    flex:none;width:56px;height:56px;border:2px solid var(--line);border-radius:8px;background:#fff;
+    padding:0;cursor:pointer;overflow:hidden;
+  }
+  .lb-strip button img{width:100%;height:100%;object-fit:contain;display:block;}
+  .lb-strip button[aria-current="true"]{border-color:var(--orange);}
+  .lb-strip button:focus-visible{outline:3px solid var(--orange);outline-offset:1px;}
   .lb-title{font-size:18px;font-weight:800;color:var(--navy-ink);line-height:1.25;padding-right:34px;}
   .lb-sub{font-size:12.5px;color:var(--ink-soft);margin:6px 0 14px;}
   .lb-sub b{font-family:'JetBrains Mono',monospace;color:var(--ink);}
@@ -467,11 +489,6 @@
   .lb-chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff;}
   .lb-chip.match{box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--orange);}
   .lb-note{font-size:12px;color:var(--ink-soft);margin:0 0 14px;}
-  .lb-link{
-    display:inline-block;border:1px solid var(--navy);color:var(--navy);border-radius:8px;
-    padding:8px 14px;font-size:13px;font-weight:700;text-decoration:none;
-  }
-  .lb-link:hover{background:var(--navy);color:#fff;}
 
   /* elemen khusus mobile (disembunyikan di PC) */
   .m-sort, .ms-head, .to-top, td.c-break, td.c-mcm{display:none;}
@@ -704,8 +721,10 @@
     .modal{align-items:flex-end;padding:0;}
     .modal-box{border-radius:16px 16px 0 0;max-height:90vh;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-width:none;}
     .modal-box.lb-box{grid-template-columns:1fr;gap:14px;padding:18px 16px calc(18px + env(safe-area-inset-bottom));}
-    .lb-img{min-height:200px;}
-    .lb-img img{max-height:44vh;}
+    .lb-img{min-height:240px;}
+    .lb-stage img{max-height:48vh;}
+    .lb-strip button{width:60px;height:60px;}
+    .lb-nav{width:42px;height:42px;}
     .lb-title{font-size:16.5px;}
 
     /* tombol kembali ke atas */
@@ -907,21 +926,21 @@
 <div class="modal" id="fotoModal" role="dialog" aria-modal="true" aria-labelledby="fotoModalTitle">
   <div class="modal-box">
     <button type="button" class="modal-x" data-close aria-label="Tutup">&times;</button>
-    <h3 id="fotoModalTitle">Foto produk dari eigeradventure.com</h3>
+    <h3 id="fotoModalTitle">Foto produk dari master artikel</h3>
     <p id="fotoModalStatus"></p>
+    <p>Foto diambil dari file master foto (kolom <code>Seller SKU</code>, <code>Color</code>, <code>Gambar1</code>&ndash;<code>Gambar8</code>) dan dicocokkan lewat Generic Code dan warna.</p>
     <ol class="steps">
-      <li>Klik <b>Salin kode</b> di bawah. Kode berisi daftar <b id="fotoCount">0</b> produk dari file export yang sedang dibuka.</li>
-      <li>Buka <b>https://www.eigeradventure.com</b> di Chrome (tab baru), tekan <code>F12</code>, lalu pilih tab <b>Console</b>.</li>
-      <li>Tempel kode lalu tekan Enter. Jika Chrome menolak menempel, ketik <code>allow pasting</code>, Enter, lalu tempel ulang.</li>
-      <li>Tunggu sampai selesai (kira-kira 5&ndash;15 menit). File <code>gambar.json</code> akan terunduh otomatis.</li>
+      <li>Klik <b>Pilih file master (.xlsx)</b>, lalu pilih file master foto terbaru. Foto langsung aktif di tools ini.</li>
+      <li>Supaya berlaku untuk semua tim, klik <b>Unduh gambar.json</b>.</li>
       <li>Upload <code>gambar.json</code> ke repo GitHub (Add file &rarr; Upload files) bersama <code>index.html</code>, tunggu 1&ndash;2 menit, lalu tekan Ctrl+F5.</li>
     </ol>
     <div class="modal-actions">
-      <button type="button" class="btn" id="fotoCopyBtn">Salin kode</button>
-      <button type="button" class="btn ghost" id="fotoLoadBtn">Muat gambar.json dari komputer</button>
-      <span class="copy-ok" id="fotoCopyOk" hidden>Kode tersalin</span>
+      <button type="button" class="btn" id="fotoMasterBtn">Pilih file master (.xlsx)</button>
+      <button type="button" class="btn ghost" id="fotoDownloadBtn" disabled>Unduh gambar.json</button>
+      <button type="button" class="btn ghost" id="fotoLoadBtn">Muat gambar.json</button>
     </div>
-    <details class="code-d"><summary>Lihat kode</summary><textarea class="code-box" id="fotoCode" readonly spellcheck="false"></textarea></details>
+    <div class="foto-prog" id="fotoProg" hidden></div>
+    <input type="file" id="fotoMasterFile" accept=".xlsx,.xls,.csv" hidden>
     <input type="file" id="fotoFile" accept=".json,application/json" hidden>
   </div>
 </div>
@@ -929,16 +948,23 @@
 <div class="modal" id="lb" role="dialog" aria-modal="true" aria-label="Foto produk">
   <div class="modal-box lb-box">
     <button type="button" class="modal-x" data-close aria-label="Tutup">&times;</button>
-    <div class="lb-img" id="lbImg"></div>
+    <div class="lb-left">
+      <div class="lb-img" id="lbImg">
+        <button type="button" class="lb-nav prev" id="lbPrev" aria-label="Foto sebelumnya" hidden>&#8249;</button>
+        <div class="lb-stage" id="lbStage"></div>
+        <button type="button" class="lb-nav next" id="lbNext" aria-label="Foto berikutnya" hidden>&#8250;</button>
+        <div class="lb-count" id="lbCount" hidden></div>
+      </div>
+      <div class="lb-strip" id="lbStrip"></div>
+    </div>
     <div>
       <div class="lb-title" id="lbTitle"></div>
       <div class="lb-sub" id="lbSub"></div>
       <div id="lbColorsWrap" hidden>
-        <div class="lb-label">Warna di website</div>
+        <div class="lb-label">Warna tersedia di master foto</div>
         <div class="lb-colors" id="lbColors"></div>
         <div class="lb-note" id="lbNote"></div>
       </div>
-      <a class="lb-link" id="lbLink" target="_blank" rel="noopener noreferrer">Buka di eigeradventure.com &#8599;</a>
     </div>
   </div>
 </div>
@@ -1158,7 +1184,11 @@
         skuCount: info.skus.size || info.rows.length,
         totalQty: info.totalQty,
         binCodes: [...info.bins].sort().join(', '),
-        colors: [...new Set(info.rows.map(skuColor).filter(Boolean))],
+        colors: (() => {            // warna di toko, urut dari qty terbanyak
+          const q = {};
+          info.rows.forEach(rw => { const c = skuColor(rw); if(c) q[c] = (q[c] || 0) + (parseFloat(qtyKey ? rw[qtyKey] : 0) || 0); });
+          return Object.keys(q).sort((a, b) => q[b] - q[a]);
+        })(),
       };
     });
     detailByGeneric = {};
@@ -1199,27 +1229,13 @@
     updateFotoBar();
   }
 
-  // ===== Foto produk (gambar.json dari eigeradventure.com) =====
-  const IMG_BASE_DEFAULT = 'https://d1yutv2xslo29o.cloudfront.net/product/variant/media/web/';
-  const SITE = 'https://www.eigeradventure.com';
-  let imgDB = null;          // {base, items:{kodeGeneric:{n,u,d,c:{WARNA:file}}}, bySlug}
+  // ===== Foto produk (gambar.json dari file master foto) =====
+  let imgDB = null;          // {bases, items:{kodeGeneric:{c:{WARNA:[kode foto,...]}}}, generated, source}
+  let imgRaw = null;         // objek JSON asli, untuk tombol "Unduh gambar.json"
   let imgState = 'loading';  // loading | ok | missing
-  let exportProducts = [];   // [[kodeGeneric, namaProduk]] dari file export yang dibuka
   let skuNameKeyG = null;
   const PLACEHOLDER = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>';
-  // Singkatan warna di data toko -> kemungkinan nama warna di website
-  const COLOR_ALIASES = {
-    BLK:['BLACK'], NAV:['NAVY'], NVY:['NAVY'], GRY:['GREY','GRAY'], BLU:['BLUE'], BRW:['BROWN'], KHK:['KHAKI'],
-    GRE:['GREEN'], GRN:['GREEN'], WHT:['WHITE'], PNK:['PINK'], DGR:['DARKGREY','DARKGRAY'], OWH:['OFFWHITE'],
-    TER:['TERRACOTTA','TERACOTTA'], YEL:['YELLOW'], MAR:['MAROON'], ORA:['ORANGE'], CRE:['CREAM'],
-    LGY:['LIGHTGREY','LIGHTGRAY'], LBL:['LIGHTBLUE'], DBR:['DARKBROWN'], MUS:['MUSTARD'], LGE:['LIGHTGREEN'],
-    DGN:['DARKGREEN'], PUR:['PURPLE'], CLY:['CLAY'], TOS:['TOSCA','TURQUOISE'], DBL:['DARKBLUE'], OLI:['OLIVE'],
-    RED:['RED'], SIL:['SILVER']
-  };
-  const slugify = n => String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  const normColor = s => String(s || '').toUpperCase().replace(/[^A-Z]/g, '');
-  const isSubseq = (a, b) => { let i = 0; for(const ch of b){ if(i < a.length && ch === a[i]) i++; } return i === a.length; };
-  const safeFile = f => typeof f === 'string' && /^[\w.-]+$/.test(f);
+  const safeUrl = u => typeof u === 'string' && /^https:\/\/[a-z0-9.-]+\.(?:slatic\.net|lazada\.co\.id|lazada\.com)\//i.test(u);
 
   // warna dari nama SKU: "NAMA, WARNA, UKURAN"
   function skuColor(row){
@@ -1228,53 +1244,53 @@
     return parts.length >= 3 ? parts[parts.length - 2].trim() : '';
   }
 
-  function itemFor(gc, name){
+  // kode foto -> alamat lengkap. Bentuk: "hash" (basis 0), "1:hash" (basis 1), atau alamat https penuh
+  function decodeImg(e){
+    if(typeof e !== 'string') return null;
+    if(e.startsWith('https://')) return safeUrl(e) ? e : null;
+    const m = /^(?:(\d+):)?([0-9a-f]{32})$/.exec(e);
+    if(!m) return null;
+    const base = imgDB.bases[Number(m[1] || 0)];
+    return safeUrl(base) ? base + m[2] + '.jpg' : null;
+  }
+  // CDN Lazada menyediakan versi kecil lewat akhiran _200x200q80.jpg. Bila gagal dimuat, otomatis kembali ke foto asli.
+  const sized = (u, px) => /\.slatic\.net\//.test(u) ? u + '_' + px + 'x' + px + 'q80.jpg' : u;
+
+  // Cari foto untuk satu generic. `colors` = warna di toko (urut prioritas). Cocok persis dengan kode warna master;
+  // bila tidak ada, dipakai warna pertama di master sebagai foto referensi.
+  function imgInfo(gc, colors){
     if(!imgDB) return null;
-    return imgDB.items[gc] || (name ? imgDB.bySlug[slugify(name)] : null) || null;
-  }
-
-  // pilih warna website yang paling cocok dengan singkatan warna toko; null bila tidak yakin
-  function pickColor(item, abbr){
-    const names = Object.keys((item && item.c) || {});
+    const item = imgDB.items[gc];
+    if(!item || !item.c) return null;
+    const names = Object.keys(item.c);
     if(!names.length) return null;
-    if(names.length === 1) return names[0];
-    const a = normColor(abbr);
-    if(!a) return null;
-    const nn = names.map(n => ({n, k: normColor(n)}));
-    const only = list => list.length === 1 ? list[0].n : null;
-    let hit = only(nn.filter(x => x.k === a)); if(hit) return hit;
-    const al = (COLOR_ALIASES[a] || []).map(normColor);
-    hit = only(nn.filter(x => al.includes(x.k))); if(hit) return hit;
-    hit = only(nn.filter(x => x.k.startsWith(a))); if(hit) return hit;
-    return only(nn.filter(x => x.k[0] === a[0] && isSubseq(a, x.k)));
+    const want = (colors || []).map(x => String(x || '').trim().toUpperCase()).filter(Boolean);
+    let color = null, exact = false;
+    for(const w of want){
+      const hit = names.find(n => n.toUpperCase() === w);
+      if(hit){ color = hit; exact = true; break; }
+    }
+    if(!color) color = names[0];
+    const urls = (item.c[color] || []).map(decodeImg).filter(Boolean);
+    if(!urls.length) return null;
+    return {names, color, exact, urls};
   }
 
-  function imgInfo(gc, abbr, name){
-    const item = itemFor(gc, name);
-    if(!item) return null;
-    const colorName = pickColor(item, abbr);
-    const file = (colorName && item.c && item.c[colorName]) || item.d || null;
-    if(!safeFile(file)) return null;
-    const base = imgDB.base;
-    return {item, file, colorName, thumb: base + 'small/' + file, full: base + file};
-  }
-
-  function thumbHtml(gc, name, abbr){
-    const info = imgInfo(gc, abbr, name);
-    const attrs = `data-gc="${escapeAttr(gc)}" data-name="${escapeAttr(name)}" data-color="${escapeAttr(abbr || '')}"`;
+  function thumbHtml(gc, name, colors){
+    const info = imgInfo(gc, colors);
+    const attrs = `data-gc="${escapeAttr(gc)}" data-name="${escapeAttr(name)}" data-colors="${escapeAttr((colors || []).join(','))}"`;
     if(info){
-      return `<button type="button" class="thumb" ${attrs} aria-label="Lihat foto ${escapeAttr(name)}"><img class="thumb-img" src="${escapeAttr(info.thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></button>`;
+      return `<button type="button" class="thumb" ${attrs} aria-label="Lihat foto ${escapeAttr(name)}"><img class="thumb-img" src="${escapeAttr(sized(info.urls[0], 200))}" data-orig="${escapeAttr(info.urls[0])}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></button>`;
     }
     return `<button type="button" class="thumb noimg" ${attrs} aria-label="Foto ${escapeAttr(name)} belum tersedia" title="Foto belum tersedia">${PLACEHOLDER}</button>`;
   }
 
   function applyImageDB(json){
     if(!json || typeof json !== 'object' || !json.items || typeof json.items !== 'object') throw new Error('Format gambar.json tidak dikenali');
-    const bySlug = {};
-    Object.keys(json.items).forEach(k => { const it = json.items[k]; if(it && it.u) bySlug[it.u] = it; });
+    imgRaw = json;
     imgDB = {
-      base: (typeof json.base === 'string' && /^https:\/\//.test(json.base)) ? json.base : IMG_BASE_DEFAULT,
-      items: json.items, bySlug: bySlug, generated: json.generated || ''
+      bases: Array.isArray(json.bases) && json.bases.length ? json.bases : ['https://id-live.slatic.net/p/'],
+      items: json.items, generated: json.generated || '', source: json.source || ''
     };
     imgState = 'ok';
   }
@@ -1285,7 +1301,7 @@
       if(!res.ok) throw new Error('HTTP ' + res.status);
       applyImageDB(await res.json());
     }catch(e){
-      imgDB = null; imgState = 'missing';
+      imgDB = null; imgRaw = null; imgState = 'missing';
     }
     onImagesChanged();
   }
@@ -1301,7 +1317,7 @@
     const btn = document.getElementById('fotoBtn');
     bar.classList.toggle('ok', imgState === 'ok');
     if(imgState === 'ok'){
-      const have = summaryRows.filter(r => imgInfo(r.genericCode, '', String(r.sampleName).split(',')[0].trim())).length;
+      const have = summaryRows.filter(r => imgInfo(r.genericCode, r.colors)).length;
       txt.innerHTML = `<b>Foto produk aktif</b> &middot; ${fmtNum(have)} dari ${fmtNum(summaryRows.length)} generic di daftar ini punya foto`;
       btn.textContent = 'Perbarui foto';
     } else if(imgState === 'loading'){
@@ -1331,199 +1347,121 @@
     lbTrigger = null;
   }
 
-  // ----- lightbox foto -----
-  function openLightbox(gc, name, abbr, trigger){
+  // ----- lightbox foto (galeri hingga 8 sudut) -----
+  function openLightbox(gc, name, colors, trigger){
     lbTrigger = trigger || null;
-    const item = itemFor(gc, name);
-    lbCtx = {gc, name, abbr, item, active: item ? (pickColor(item, abbr) || defaultColor(item)) : null};
+    const info = imgInfo(gc, colors);
+    lbCtx = {gc, name, colors: colors || [], color: info ? info.color : null, idx: 0};
     renderLightbox();
     openModal(document.getElementById('lb'));
   }
-  function defaultColor(item){
-    const names = Object.keys(item.c || {});
-    return names.find(n => item.c[n] === item.d) || names[0] || null;
+  function lbStep(d){
+    const info = lbCtx && lbCtx.color ? imgInfo(lbCtx.gc, [lbCtx.color]) : null;
+    if(!info || info.urls.length < 2) return;
+    lbCtx.idx = (lbCtx.idx + d + info.urls.length) % info.urls.length;
+    renderLightbox();
   }
   function renderLightbox(){
-    const {gc, name, abbr, item, active} = lbCtx;
-    document.getElementById('lbTitle').textContent = (item && item.n) || name || gc;
-    document.getElementById('lbSub').innerHTML = 'Generic <b>' + escapeHtml(gc) + '</b>' + (abbr ? ' &middot; warna di toko: <b>' + escapeHtml(abbr) + '</b>' : '');
-    const box = document.getElementById('lbImg');
-    const file = item ? ((active && item.c && item.c[active]) || item.d || null) : null;
-    if(safeFile(file)){
-      box.innerHTML = '<img alt="" referrerpolicy="no-referrer">';
-      const im = box.querySelector('img');
-      im.alt = (item.n || name || '') + (active ? ' ' + active : '');
-      im.addEventListener('error', () => { box.innerHTML = '<div class="lb-none">Foto tidak bisa dimuat. Coba buka lewat tombol di samping.</div>'; });
-      im.src = imgDB.base + file;
-    } else {
-      box.innerHTML = '<div class="lb-none">Foto belum tersedia untuk generic ini.<br>Mungkin produknya belum dijual di website, atau namanya berbeda.</div>';
-    }
-    const names = item ? Object.keys(item.c || {}) : [];
+    const {gc, name, colors} = lbCtx;
+    const info = lbCtx.color ? imgInfo(gc, [lbCtx.color]) : null;
+    document.getElementById('lbTitle').textContent = name || gc;
+    document.getElementById('lbSub').innerHTML = 'Generic <b>' + escapeHtml(gc) + '</b>' + (colors.length ? ' &middot; warna di toko: <b>' + escapeHtml(colors.join(', ')) + '</b>' : '');
+    const stage = document.getElementById('lbStage'), strip = document.getElementById('lbStrip');
+    const prev = document.getElementById('lbPrev'), next = document.getElementById('lbNext'), count = document.getElementById('lbCount');
     const wrap = document.getElementById('lbColorsWrap');
-    wrap.hidden = names.length === 0;
-    if(names.length){
-      const matched = pickColor(item, abbr);
-      document.getElementById('lbColors').innerHTML = names.map(n =>
-        `<button type="button" class="lb-chip ${(abbr && names.length > 1 && n === matched) ? 'match' : ''}" data-color-name="${escapeAttr(n)}" aria-pressed="${n === active}">${escapeHtml(n)}</button>`).join('');
-      let note = '';
-      if(abbr && names.length === 1) note = 'Foto referensi dari website, warna bisa berbeda dengan barang di toko.';
-      else if(abbr && matched) note = 'Warna yang cocok dengan "' + abbr + '" dipilih otomatis (ditandai lingkaran oranye).';
-      else if(abbr) note = 'Warna "' + abbr + '" tidak bisa dikenali otomatis, pilih manual di atas.';
-      document.getElementById('lbNote').textContent = note;
-    }
-    const link = document.getElementById('lbLink');
-    const slug = (item && item.u) || slugify(name);
-    link.href = SITE + '/d/' + slug + (active ? '?color=' + encodeURIComponent(active.toLowerCase()).replace(/%20/g, '+') : '');
-    link.textContent = (item ? 'Buka di eigeradventure.com' : 'Coba cari di eigeradventure.com') + ' \u2197';
-  }
-
-  // ----- panduan + pembuat gambar.json -----
-  // Fungsi ini dijalankan di console browser pada halaman eigeradventure.com (bukan di tools ini).
-  // Harus berdiri sendiri: isinya disalin utuh (toString) ke clipboard.
-  async function gambarCollector(LIST){
-    if(!/(^|\.)eigeradventure\.com$/.test(location.hostname)){
-      alert('Kode ini harus dijalankan di halaman https://www.eigeradventure.com (bukan di halaman tools). Buka eigeradventure.com, lalu tempel kodenya lagi.');
+    if(!info){
+      stage.innerHTML = '<div class="lb-none">Foto belum tersedia untuk generic ini di file master.</div>';
+      strip.innerHTML = ''; prev.hidden = next.hidden = count.hidden = true; wrap.hidden = true;
       return;
     }
-    var CONC = 3, DELAY = 120;
-    var slugify = function(n){ return String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); };
-    var RE_FILE = /product\/variant\/media\/web\/(?:(?:small|thumbnail)\/)?([A-Za-z0-9_-]+\.(?:webp|jpe?g|png))/;
-    var fileOf = function(u){ var m = RE_FILE.exec(u || ''); return m ? m[1] : null; };
-    var groups = new Map();
-    LIST.forEach(function(row){
-      var gc = String(row[0]), name = String(row[1]), s = slugify(name);
-      if(!s) return;
-      if(!groups.has(s)) groups.set(s, {name: name, gcs: []});
-      groups.get(s).gcs.push(gc);
-    });
-    var jobs = Array.from(groups.entries());
-    var items = {}, misses = [], mismatches = [], diag = [];
-    var done = 0, found = 0, stop = false, blocked = 0;
-
-    var box = document.createElement('div');
-    Object.assign(box.style, {position:'fixed', top:'12px', right:'12px', zIndex:'2147483647', background:'#0B1B4A', color:'#fff', font:'600 13px/1.45 system-ui,sans-serif', padding:'12px 14px', borderRadius:'10px', boxShadow:'0 8px 24px rgba(0,0,0,.35)', maxWidth:'330px'});
-    var msg = document.createElement('div');
-    var btn = document.createElement('button');
-    btn.textContent = 'Berhenti & unduh sekarang';
-    Object.assign(btn.style, {marginTop:'8px', padding:'6px 10px', border:'0', borderRadius:'6px', background:'#E46636', color:'#fff', font:'700 12px system-ui,sans-serif', cursor:'pointer'});
-    btn.onclick = function(){ stop = true; };
-    box.appendChild(msg); box.appendChild(btn); document.body.appendChild(box);
-    var upd = function(){ msg.textContent = 'Mengambil foto produk\u2026 ' + done + '/' + jobs.length + ' \u00b7 ditemukan ' + found + ' \u00b7 tidak ketemu ' + misses.length; };
-    upd();
-
-    function parse(html){
-      var doc = new DOMParser().parseFromString(html, 'text/html');
-      var sku = null;
-      // kumpulkan teks tampilan; pisahkan antar-elemen dengan spasi supaya "SKU" tidak menempel ke teks lain
-      var parts = [];
-      if(doc.body){
-        var tw = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-        while(tw.nextNode()){
-          var par = tw.currentNode.parentNode;
-          if(par && /^(SCRIPT|STYLE|NOSCRIPT)$/i.test(par.nodeName)) continue;
-          var v = tw.currentNode.nodeValue.trim();
-          if(v) parts.push(v);
-        }
-      }
-      var text = parts.join(' ');
-      var m = text.match(/\bSKU\s*[:#]?\s*(\d{6,})/);
-      if(m) sku = m[1];
-      if(!sku){ m = html.match(/"sku"\s*:\s*"(\d{9})"/i); if(m) sku = m[1]; }
-      var h1 = doc.querySelector('h1');
-      var pname = h1 ? h1.textContent.trim() : '';
-      var colors = {}, def = null, nImg = 0;
-      doc.querySelectorAll('img').forEach(function(img){
-        var cands = [img.getAttribute('src'), img.getAttribute('data-src'), img.getAttribute('srcset')];
-        var f = null, src = '';
-        for(var i = 0; i < cands.length && !f; i++){ f = fileOf(cands[i]); if(f) src = cands[i]; }
-        if(!f) return;
-        nImg++;
-        var alt = (img.getAttribute('alt') || '').trim();
-        if(!alt || /^varian\b/i.test(alt)) return;
-        var color = alt.replace(/-\d+$/, '').trim().toUpperCase();
-        if(!color || color === pname.toUpperCase() || color.length > 30) return;
-        var big = !/\/web\/(?:small|thumbnail)\//.test(src);
-        if(!colors[color]) colors[color] = f;
-        if(big && /-0$/.test(alt) && !def) def = f;
-      });
-      if(!def){ var og = doc.querySelector('meta[property="og:image"]'); def = fileOf(og && og.getAttribute('content')); }
-      if(!def){ var k0 = Object.keys(colors)[0]; if(k0) def = colors[k0]; }
-      Object.keys(colors).slice(12).forEach(function(k){ delete colors[k]; });
-      return {sku: sku, pname: pname, colors: colors, def: def, nImg: nImg};
-    }
-
-    async function one(job){
-      var slug = job[0], g = job[1], res;
-      try{ res = await fetch('/d/' + slug, {credentials: 'same-origin'}); }
-      catch(e){ misses.push(g.name); diag.push({slug: slug, status: 'error'}); return; }
-      if(res.status === 429 || res.status === 403){ blocked++; misses.push(g.name); diag.push({slug: slug, status: res.status}); return; }
-      if(!res.ok){ misses.push(g.name); diag.push({slug: slug, status: res.status}); return; }
-      var p = parse(await res.text());
-      if(!p.sku || (!p.def && !Object.keys(p.colors).length)){
-        misses.push(g.name); diag.push({slug: slug, status: res.status, skuDitemukan: p.sku, jumlahGambar: p.nImg}); return;
-      }
-      if(g.gcs.indexOf(p.sku) < 0) mismatches.push({nama: g.name, kodeToko: g.gcs.join(','), skuWebsite: p.sku});
-      items[p.sku] = {n: p.pname || g.name, u: slug, d: p.def || null, c: p.colors};
-      found++;
-    }
-
-    var idx = 0;
-    async function worker(){
-      while(!stop){
-        var i = idx++;
-        if(i >= jobs.length) break;
-        await one(jobs[i]);
-        done++; upd();
-        if(blocked >= 5){ stop = true; }
-        await new Promise(function(r){ setTimeout(r, DELAY); });
-      }
-    }
-    await Promise.all(Array.from({length: CONC}, worker));
-
-    var out = {v: 1, generated: new Date().toISOString(), base: 'https://d1yutv2xslo29o.cloudfront.net/product/variant/media/web/', items: items};
-    window.__gambarHasil = {out: out, misses: misses, mismatches: mismatches, diag: diag};
-    console.log('Foto ditemukan:', found, '| tidak ketemu:', misses.length, '| SKU website beda dengan kode toko:', mismatches.length);
-    if(mismatches.length) console.table(mismatches.slice(0, 20));
-    if(misses.length) console.log('Contoh produk tidak ketemu:', misses.slice(0, 30));
-    if(diag.length) console.table(diag.slice(0, 10));
-    btn.textContent = 'Tutup';
-    btn.onclick = function(){ box.remove(); };
-    if(found > 0){
-      var blob = new Blob([JSON.stringify(out)], {type: 'application/json'});
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob); a.download = 'gambar.json';
-      document.body.appendChild(a); a.click(); a.remove();
-      msg.textContent = (blocked >= 5 ? 'Website membatasi akses, hasil parsial. ' : 'Selesai. ') + 'Ditemukan ' + found + ', tidak ketemu ' + misses.length + ', SKU berbeda ' + mismatches.length + '. File gambar.json terunduh.';
-    } else {
-      msg.textContent = 'Tidak ada foto yang berhasil dibaca. Buka Console untuk melihat rincian, lalu kabari Claude.';
-    }
-    return out;
+    const n = info.urls.length;
+    lbCtx.idx = Math.min(Math.max(lbCtx.idx, 0), n - 1);
+    stage.innerHTML = '<img alt="" referrerpolicy="no-referrer">';
+    const im = stage.querySelector('img');
+    im.alt = (name || gc) + ' ' + info.color + ' foto ' + (lbCtx.idx + 1);
+    im.addEventListener('error', () => { stage.innerHTML = '<div class="lb-none">Foto tidak bisa dimuat. Periksa koneksi internet.</div>'; });
+    im.src = info.urls[lbCtx.idx];
+    prev.hidden = next.hidden = count.hidden = n < 2;
+    count.textContent = (lbCtx.idx + 1) + ' / ' + n;
+    strip.innerHTML = n < 2 ? '' : info.urls.map((u, i) =>
+      `<button type="button" data-i="${i}" aria-label="Foto ${i + 1}" aria-current="${i === lbCtx.idx}"><img src="${escapeAttr(sized(u, 120))}" data-orig="${escapeAttr(u)}" alt="" loading="lazy" referrerpolicy="no-referrer"></button>`).join('');
+    // chip warna dari master
+    const upper = colors.map(c => c.toUpperCase());
+    wrap.hidden = false;
+    document.getElementById('lbColors').innerHTML = info.names.map(nm =>
+      `<button type="button" class="lb-chip ${upper.includes(nm.toUpperCase()) ? 'match' : ''}" data-color-name="${escapeAttr(nm)}" aria-pressed="${nm === info.color}">${escapeHtml(nm)}</button>`).join('');
+    const anyStoreColor = info.names.some(nm => upper.includes(nm.toUpperCase()));
+    let note = '';
+    if(colors.length && !anyStoreColor) note = 'Foto warna ' + colors.join(', ') + ' belum ada di master. Yang tampil adalah foto referensi warna lain.';
+    else if(upper.length) note = 'Lingkaran oranye = warna yang ada di toko.';
+    document.getElementById('lbNote').textContent = note;
   }
 
-  function buildCollectorCode(){
-    return '(' + gambarCollector.toString() + ')(' + JSON.stringify(exportProducts) + ');';
+  // ----- perbarui dari file master (.xlsx) -----
+  // Satu baris master = satu SKU; foto sama untuk semua ukuran dalam satu warna, jadi dikelompokkan per "generic.WARNA".
+  function buildImageDBFromMaster(rows){
+    if(!rows.length) throw new Error('File master kosong');
+    const keys = Object.keys(rows[0]);
+    const colorKey = keys.find(k => /^color$/i.test(k.trim()));
+    const imgKeys = keys.filter(k => /^gambar\s*\d+$/i.test(k.trim()))
+      .sort((a, b) => parseInt(a.replace(/\D/g, ''), 10) - parseInt(b.replace(/\D/g, ''), 10));
+    if(!colorKey || !imgKeys.length) throw new Error('Kolom "Color" dan "Gambar1 ... Gambar8" tidak ditemukan. Pastikan ini file master foto.');
+    const bases = ['https://id-live.slatic.net/p/', 'https://sg-live-01.slatic.net/p/'];
+    const enc = u => {
+      for(let i = 0; i < bases.length; i++){
+        const b = bases[i];
+        if(u.startsWith(b) && /^[0-9a-f]{32}\.jpg$/.test(u.slice(b.length))) return (i ? i + ':' : '') + u.slice(b.length, -4);
+      }
+      return u;
+    };
+    const best = new Map();
+    rows.forEach(r => {
+      const c = String(r[colorKey] ?? '').trim();
+      if(c.indexOf('.') < 1) return;
+      const urls = [];
+      imgKeys.forEach(k => { const v = String(r[k] ?? '').trim(); if(v.startsWith('https://') && !urls.includes(v)) urls.push(v); });
+      if(!urls.length) return;
+      const prev = best.get(c);
+      if(!prev || urls.length > prev.length) best.set(c, urls);
+    });
+    const items = {};
+    best.forEach((urls, c) => {
+      const dot = c.indexOf('.');
+      const gen = c.slice(0, dot), col = c.slice(dot + 1);
+      if(!items[gen]) items[gen] = {c: {}};
+      items[gen].c[col] = urls.map(enc);
+    });
+    return {v: 2, generated: new Date().toISOString().slice(0, 10), source: '', bases: bases, items: items};
+  }
+
+  function fotoProg(text, isErr){
+    const el = document.getElementById('fotoProg');
+    el.hidden = !text;
+    el.textContent = text || '';
+    el.classList.toggle('err', !!isErr);
   }
 
   function openFotoModal(){
-    document.getElementById('fotoCount').textContent = fmtNum(exportProducts.length);
-    document.getElementById('fotoModalStatus').innerHTML = imgState === 'ok'
-      ? `Foto aktif untuk ${fmtNum(Object.keys(imgDB.items).length)} produk${imgDB.generated ? ' (dibuat ' + escapeHtml(String(imgDB.generated).slice(0, 10)) + ')' : ''}. Ulangi langkah di bawah kalau ada produk baru yang belum punya foto.`
-      : 'Foto produk diambil dari eigeradventure.com dan dicocokkan lewat Generic Code. Langkah di bawah cukup dilakukan sekali, lalu diulang kalau ada produk baru.';
-    document.getElementById('fotoCode').value = buildCollectorCode();
-    document.getElementById('fotoCopyOk').hidden = true;
+    const st = document.getElementById('fotoModalStatus');
+    if(imgState === 'ok'){
+      const nGen = Object.keys(imgDB.items).length;
+      st.innerHTML = `Foto aktif untuk <b>${fmtNum(nGen)}</b> generic${imgDB.source ? ' (sumber: ' + escapeHtml(imgDB.source) + ')' : ''}${imgDB.generated ? ', dibuat ' + escapeHtml(String(imgDB.generated).slice(0, 10)) : ''}.`;
+    } else {
+      st.textContent = 'Foto produk belum aktif. Pilih file master foto di bawah, atau upload gambar.json ke folder yang sama dengan index.html.';
+    }
+    document.getElementById('fotoDownloadBtn').disabled = !imgRaw;
+    fotoProg('');
     openModal(document.getElementById('fotoModal'));
   }
 
-  async function copyCollectorCode(){
-    const ta = document.getElementById('fotoCode');
-    try{
-      await navigator.clipboard.writeText(ta.value);
-    }catch(e){
-      ta.closest('details').open = true;
-      ta.select();
-      document.execCommand('copy');
-    }
-    document.getElementById('fotoCopyOk').hidden = false;
+  function downloadImageDB(){
+    if(!imgRaw) return;
+    const blob = new Blob([JSON.stringify(imgRaw)], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'gambar.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }
 
   // ===== Tab =====
@@ -1960,10 +1898,9 @@
     rows.forEach(r => {
       const isOpen = openRows.has(r.genericCode);
       const pname = String(r.sampleName).split(',')[0].trim();
-      const abbr = r.colors.length === 1 ? r.colors[0] : '';
       html += `<tr class="main-row ${isOpen ? 'is-open':''}" data-gc="${escapeAttr(r.genericCode)}">
         <td class="c-caret"><span class="caret ${isOpen ? 'open':''}">&#9656;</span></td>
-        ${showFoto ? `<td class="c-foto">${thumbHtml(r.genericCode, pname, abbr)}</td>` : ''}
+        ${showFoto ? `<td class="c-foto">${thumbHtml(r.genericCode, pname, r.colors)}</td>` : ''}
         <td class="mono c-gc">${escapeHtml(r.genericCode)}</td>
         <td class="name-cell c-name">${escapeHtml(r.sampleName)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc2)}</td>
@@ -2015,7 +1952,7 @@
       let foto = '';
       if(showFoto){
         const nm = skuNameKeyG ? String(r[skuNameKeyG] ?? '') : '';
-        foto = `<td class="d-foto" data-label="Foto">${thumbHtml(gc, nm.split(',')[0].trim(), skuColor(r))}</td>`;
+        foto = `<td class="d-foto" data-label="Foto">${thumbHtml(gc, nm.split(',')[0].trim(), [skuColor(r)].filter(Boolean))}</td>`;
       }
       html += '<tr>' + foto + cols.map(c => `<td class="mono" data-label="${escapeAttr(c)}"><span class="v">${escapeHtml(r[c] ?? '')}</span></td>`).join('') + '</tr>';
     });
@@ -2103,18 +2040,46 @@
   // --- foto produk ---
   tableWrap.addEventListener('click', (e) => {
     const t = e.target.closest('.thumb');
-    if(t) openLightbox(t.dataset.gc, t.dataset.name, t.dataset.color, t);
+    if(t) openLightbox(t.dataset.gc, t.dataset.name, (t.dataset.colors || '').split(',').filter(Boolean), t);
   });
-  tableWrap.addEventListener('error', (e) => {
+  // gambar kecil gagal dimuat: coba foto asli dulu, kalau tetap gagal tampilkan ikon pengganti
+  const imgFallback = (e) => {
     const im = e.target;
-    if(!(im instanceof HTMLImageElement) || !im.classList.contains('thumb-img')) return;
-    const t = im.closest('.thumb');
-    if(t){ t.classList.add('noimg'); t.innerHTML = PLACEHOLDER; }
-  }, true);
+    if(!(im instanceof HTMLImageElement)) return;
+    if(im.dataset.orig && !im.dataset.retry && im.src !== im.dataset.orig){ im.dataset.retry = '1'; im.src = im.dataset.orig; return; }
+    if(im.classList.contains('thumb-img')){
+      const t = im.closest('.thumb');
+      if(t){ t.classList.add('noimg'); t.innerHTML = PLACEHOLDER; }
+    } else if(im.closest('.lb-strip')){
+      im.style.visibility = 'hidden';
+    }
+  };
+  tableWrap.addEventListener('error', imgFallback, true);
+  document.getElementById('lbStrip').addEventListener('error', imgFallback, true);
+  document.getElementById('lbStrip').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-i]');
+    if(!b || !lbCtx) return;
+    lbCtx.idx = Number(b.dataset.i);
+    renderLightbox();
+  });
+  document.getElementById('lbPrev').addEventListener('click', () => lbStep(-1));
+  document.getElementById('lbNext').addEventListener('click', () => lbStep(1));
+  (() => {   // geser kiri/kanan di layar sentuh
+    const box = document.getElementById('lbImg');
+    let x0 = null;
+    box.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, {passive: true});
+    box.addEventListener('touchend', (e) => {
+      if(x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      x0 = null;
+      if(Math.abs(dx) > 40) lbStep(dx < 0 ? 1 : -1);
+    });
+  })();
   document.getElementById('lbColors').addEventListener('click', (e) => {
     const b = e.target.closest('.lb-chip');
     if(!b || !lbCtx) return;
-    lbCtx.active = b.dataset.colorName;
+    lbCtx.color = b.dataset.colorName;
+    lbCtx.idx = 0;
     renderLightbox();
   });
   document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', (e) => {
@@ -2123,8 +2088,9 @@
   document.addEventListener('keydown', (e) => {
     if(!openModalEl) return;
     if(e.key === 'Escape'){ closeModal(); return; }
+    if(openModalEl.id === 'lb' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')){ e.preventDefault(); lbStep(e.key === 'ArrowRight' ? 1 : -1); return; }
     if(e.key === 'Tab'){
-      const f = [...openModalEl.querySelectorAll('button, a[href], input:not([type=hidden]), textarea, summary')].filter(x => !x.disabled && x.offsetParent !== null);
+      const f = [...openModalEl.querySelectorAll('button, a[href], input:not([type=hidden]), textarea, summary')].filter(x => !x.disabled && !x.hidden && x.offsetParent !== null);
       if(!f.length) return;
       const first = f[0], last = f[f.length - 1];
       if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
@@ -2132,17 +2098,39 @@
     }
   });
   document.getElementById('fotoBtn').addEventListener('click', openFotoModal);
-  document.getElementById('fotoCopyBtn').addEventListener('click', copyCollectorCode);
+  document.getElementById('fotoDownloadBtn').addEventListener('click', downloadImageDB);
   document.getElementById('fotoLoadBtn').addEventListener('click', () => document.getElementById('fotoFile').click());
+  document.getElementById('fotoMasterBtn').addEventListener('click', () => document.getElementById('fotoMasterFile').click());
   document.getElementById('fotoFile').addEventListener('change', async (e) => {
     const f = e.target.files && e.target.files[0];
     if(!f) return;
     try{
       applyImageDB(JSON.parse(await f.text()));
       onImagesChanged();
-      document.getElementById('fotoModalStatus').innerHTML = `<b>gambar.json dimuat</b> (${fmtNum(Object.keys(imgDB.items).length)} produk). Ini hanya berlaku di sesi ini; upload ke GitHub supaya permanen.`;
+      document.getElementById('fotoDownloadBtn').disabled = false;
+      fotoProg('gambar.json dimuat (' + fmtNum(Object.keys(imgDB.items).length) + ' generic). Berlaku di sesi ini; upload ke GitHub supaya permanen.');
     }catch(err){
-      document.getElementById('fotoModalStatus').textContent = 'File tidak bisa dibaca: ' + err.message;
+      fotoProg('File tidak bisa dibaca: ' + err.message, true);
+    }
+    e.target.value = '';
+  });
+  document.getElementById('fotoMasterFile').addEventListener('change', async (e) => {
+    const f = e.target.files && e.target.files[0];
+    if(!f) return;
+    fotoProg('Membaca file master\u2026 (file besar, bisa 5\u201315 detik)');
+    await new Promise(r => setTimeout(r, 50));
+    try{
+      const wb = XLSX.read(await f.arrayBuffer(), {type: 'array'});
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval: ''});
+      const db = buildImageDBFromMaster(rows);
+      db.source = f.name;
+      applyImageDB(db);
+      onImagesChanged();
+      document.getElementById('fotoDownloadBtn').disabled = false;
+      document.getElementById('fotoModalStatus').innerHTML = `Foto aktif untuk <b>${fmtNum(Object.keys(db.items).length)}</b> generic (sumber: ${escapeHtml(f.name)}).`;
+      fotoProg('Selesai: ' + fmtNum(rows.length) + ' baris master dibaca. Klik "Unduh gambar.json" lalu upload ke GitHub agar berlaku untuk semua tim.');
+    }catch(err){
+      fotoProg('Gagal membaca file master: ' + err.message, true);
     }
     e.target.value = '';
   });
