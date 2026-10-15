@@ -286,7 +286,8 @@
   tbody td{padding:10px 12px;vertical-align:top;}
   td.mono, .mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
   td.num-cell{font-family:'JetBrains Mono',monospace;text-align:right;font-weight:600;}
-  .name-cell{min-width:260px;max-width:340px;font-weight:600;}
+  .name-cell{min-width:220px;max-width:320px;font-weight:600;}
+  @media (min-width:641px){ .table-scroll > table > thead th, .table-scroll > table > tbody > tr.main-row > td{padding-left:9px;padding-right:9px;} tr.main-row > td.mc-cell{white-space:normal;min-width:84px;max-width:130px;} }
   .mc-cell{font-size:12.5px;white-space:nowrap;color:var(--ink-soft);}
   .caret{display:inline-block;width:14px;color:var(--orange);transition:transform .12s ease;}
   .caret.open{transform:rotate(90deg);}
@@ -490,6 +491,30 @@
   .lb-chip.match{box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--orange);}
   .lb-note{font-size:12px;color:var(--ink-soft);margin:0 0 14px;}
 
+
+  /* ---------- Varian ---------- */
+  .t-short{display:none;}
+  .an-merge[hidden]{display:none;}
+  .cp{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+    color:var(--navy);background:var(--navy-tint);border-radius:6px;padding:2px 8px;white-space:nowrap;
+  }
+  .v-sub{margin-top:5px;font-size:11.5px;font-weight:600;color:var(--ink-soft);}
+  .v-tag{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;margin-right:4px;}
+  .v-tag.warn{background:var(--orange-tint);color:var(--orange-deep);}
+  .v-tag.ok{background:var(--teal-bg);color:var(--teal);}
+  .filter-bar .an-merge{align-self:flex-end;}
+
+  /* ---------- Sudah terdisplay ---------- */
+  .d-help{
+    background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);
+    border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:var(--ink-soft);
+  }
+  .d-help b{color:var(--ink);}
+  .tab-badge.ok{background:var(--teal);}
+  .d-help.warn{border-left-color:var(--orange);}
+  td.c-whq{color:var(--ink-soft);}
+
   /* elemen khusus mobile (disembunyikan di PC) */
   .m-sort, .ms-head, .to-top, td.c-break, td.c-mcm{display:none;}
 
@@ -524,7 +549,7 @@
     main.wrap{padding-top:18px;padding-bottom:84px;}
 
     /* kartu semangat: poin jadi geser samping */
-    .spirit{grid-template-columns:1fr;gap:12px;padding:16px;margin-bottom:16px;}
+    .spirit{grid-template-columns:1fr;gap:12px;padding:16px;margin-bottom:16px;overflow:hidden;}
     .spirit-icon{width:40px;height:40px;}
     .spirit h3{font-size:16.5px;}
     .spirit p{font-size:13px;}
@@ -727,6 +752,29 @@
     .lb-nav{width:42px;height:42px;}
     .lb-title{font-size:16.5px;}
 
+    /* varian */
+    .t-long{display:none;}
+    .t-short{display:inline;}
+    .tabs{gap:0;}
+    .tab{padding:10px 1px;font-size:12px;gap:4px;letter-spacing:-0.01em;}
+    .tab-badge{font-size:10px;padding:1px 5px;}
+    .cp{background:transparent;padding:0;border-radius:0;font:inherit;color:inherit;}
+    .c-mcm span.cchip{background:var(--orange-tint);color:var(--orange-deep);}
+    .filter-bar .an-merge{align-self:stretch;}
+
+    /* sudah terdisplay */
+    .d-help{font-size:12.5px;padding:10px 12px;}
+    tr.main-row > td.c-whq{order:6;font-size:12px;font-weight:600;}
+    tr.main-row > td.c-whq::before{content:"Gudang ";font-family:'Plus Jakarta Sans',sans-serif;}
+    tr.main-row > td.c-whq::after{content:" pcs \00B7";}
+    table.has-foto tr.main-row > td.c-whq{display:none;}
+    .c-mcm span.gchip{background:var(--teal-bg);color:var(--teal);}
+
+    /* 5 tab: jadi grid 3 kolom di HP */
+    .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;border-bottom:none;overflow:visible;margin-bottom:16px;}
+    .tab{border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);margin:0;padding:9px 4px;font-size:12.5px;justify-content:center;}
+    .tab[aria-selected="true"]{background:var(--navy);color:#fff;border-color:var(--navy);}
+
     /* tombol kembali ke atas */
     .to-top{
       display:flex;position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;
@@ -813,34 +861,84 @@
     </div>
 
     <div class="tabs" role="tablist" aria-label="Menu tools">
-      <button type="button" class="tab" role="tab" id="tabArtikel" data-tab="artikel" aria-selected="true" aria-controls="panelArtikel"><span><span class="hide-m">Artikel </span>Belum Terdisplay</span> <span class="tab-badge" id="tabBadge">0</span></button>
-      <button type="button" class="tab" role="tab" id="tabAnalisa" data-tab="analisa" aria-selected="false" aria-controls="panelAnalisa">Analisa % per MC</button>
+      <button type="button" class="tab" role="tab" id="tabGeneric" data-tab="generic" aria-selected="true" aria-controls="panelList"><span class="t-long">Generic Belum Terdisplay</span><span class="t-short">Generic</span> <span class="tab-badge" id="tabBadge">0</span></button>
+      <button type="button" class="tab" role="tab" id="tabVarian" data-tab="varian" aria-selected="false" aria-controls="panelList"><span class="t-long">Varian Belum Terdisplay</span><span class="t-short">Varian</span> <span class="tab-badge" id="tabBadgeV">0</span></button>
+      <button type="button" class="tab" role="tab" id="tabDisplay" data-tab="display" aria-selected="false" aria-controls="panelList"><span class="t-long">Sudah Terdisplay</span><span class="t-short">Display</span> <span class="tab-badge ok" id="tabBadgeD">0</span></button>
+      <button type="button" class="tab" role="tab" id="tabDouble" data-tab="double" aria-selected="false" aria-controls="panelList"><span class="t-long">Display Double</span><span class="t-short">Double</span> <span class="tab-badge" id="tabBadgeX">0</span></button>
+      <button type="button" class="tab" role="tab" id="tabAnalisa" data-tab="analisa" aria-selected="false" aria-controls="panelAnalisa">Analisa</button>
     </div>
 
-    <div class="tab-panel" id="panelArtikel" role="tabpanel" aria-labelledby="tabArtikel">
+    <div class="tab-panel" id="panelGeneric">
+      <div class="coverage" id="coverage">
+        <div class="pct"><span id="covPct">0%</span><small>generic terdisplay</small></div>
+        <div>
+          <div class="msg" id="covMsg"></div>
+          <div class="msg-sub" id="covSub"></div>
+          <div class="bar">
+            <div class="bar-fill" id="covBar"></div>
+            <div class="bar-mark" style="left:95%;" title="Target 95%"></div>
+          </div>
+          <div class="bar-target">
+            <span class="t0">0%</span>
+            <span class="t95" style="left:95%;">Target 95%</span>
+          </div>
+        </div>
+      </div>
 
-    <div class="coverage" id="coverage">
-      <div class="pct"><span id="covPct">0%</span><small>generic terdisplay</small></div>
-      <div>
-        <div class="msg" id="covMsg"></div>
-        <div class="msg-sub" id="covSub"></div>
-        <div class="bar">
-          <div class="bar-fill" id="covBar"></div>
-          <div class="bar-mark" style="left:95%;" title="Target 95%"></div>
-        </div>
-        <div class="bar-target">
-          <span class="t0">0%</span>
-          <span class="t95" style="left:95%;">Target 95%</span>
-        </div>
+      <div class="stat-row">
+        <div class="stat"><div class="num" id="statTotal">0</div><div class="lbl">Total Generic Code</div></div>
+        <div class="stat"><div class="num" id="statWh">0</div><div class="lbl">Ada di Warehouse</div></div>
+        <div class="stat ok"><div class="num" id="statSa">0</div><div class="lbl">Ada di Selling Area</div></div>
+        <div class="stat flag"><div class="num" id="statMissing">0</div><div class="lbl">Belum Terdisplay</div></div>
       </div>
     </div>
 
-    <div class="stat-row">
-      <div class="stat"><div class="num" id="statTotal">0</div><div class="lbl">Total Generic Code</div></div>
-      <div class="stat"><div class="num" id="statWh">0</div><div class="lbl">Ada di Warehouse</div></div>
-      <div class="stat ok"><div class="num" id="statSa">0</div><div class="lbl">Ada di Selling Area</div></div>
-      <div class="stat flag"><div class="num" id="statMissing">0</div><div class="lbl">Belum Terdisplay</div></div>
+    <div class="tab-panel" id="panelVarian" hidden>
+      <div class="coverage" id="coverageV">
+        <div class="pct"><span id="covPctV">0%</span><small>varian terdisplay</small></div>
+        <div>
+          <div class="msg" id="covMsgV"></div>
+          <div class="msg-sub" id="covSubV"></div>
+          <div class="bar">
+            <div class="bar-fill" id="covBarV"></div>
+            <div class="bar-mark" style="left:95%;" title="Target 95%"></div>
+          </div>
+          <div class="bar-target">
+            <span class="t0">0%</span>
+            <span class="t95" style="left:95%;">Target 95%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="num" id="statVTotal">0</div><div class="lbl">Total Varian (generic + warna)</div></div>
+        <div class="stat"><div class="num" id="statVWh">0</div><div class="lbl">Ada di Warehouse</div></div>
+        <div class="stat ok"><div class="num" id="statVSa">0</div><div class="lbl">Ada di Selling Area</div></div>
+        <div class="stat flag"><div class="num" id="statVMissing">0</div><div class="lbl">Belum Terdisplay</div></div>
+      </div>
     </div>
+
+    <div class="tab-panel" id="panelDisplay" hidden>
+      <div class="d-help"><b>Artikel yang sudah terdisplay</b> adalah generic yang sudah ada di Selling area (zone Sales Area atau bin awalan S). Di setiap artikel terlihat warna apa saja yang sudah dipajang, qty dan bin di display, serta stok yang masih ada di gudang. <b>Warna belum lengkap</b> artinya masih ada warna lain di gudang (Available Qty &gt; 0) yang belum dipajang.</div>
+      <div class="stat-row">
+        <div class="stat ok"><div class="num" id="statDCount">0</div><div class="lbl">Artikel Terdisplay</div></div>
+        <div class="stat"><div class="num" id="statDQty">0</div><div class="lbl">Qty di Display (pcs)</div></div>
+        <div class="stat ok"><div class="num" id="statDFull">0</div><div class="lbl">Warna Sudah Lengkap</div></div>
+        <div class="stat flag"><div class="num" id="statDPart">0</div><div class="lbl">Warna Belum Lengkap</div></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panelDouble" hidden>
+      <div class="d-help warn"><b>Idealnya 1 varian (generic + warna) cukup 1 qty di display.</b> Daftar ini menampilkan varian yang qty-nya di Selling area 2 atau lebih (Available Qty, semua ukuran digabung). <b>Kelebihan</b> = qty display &minus; 1. Kelebihan ini bisa dikembalikan ke gudang, sehingga ruang display bisa dipakai untuk varian yang belum terdisplay.</div>
+      <div class="stat-row">
+        <div class="stat"><div class="num" id="statXDisp">0</div><div class="lbl">Varian di Display</div></div>
+        <div class="stat ok"><div class="num" id="statXOne">0</div><div class="lbl">Pas 1 Qty (ideal)</div></div>
+        <div class="stat flag"><div class="num" id="statXDbl">0</div><div class="lbl">Double / Lebih</div></div>
+        <div class="stat"><div class="num" id="statXExcess">0</div><div class="lbl">Total Kelebihan (pcs)</div></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panelList" role="tabpanel">
 
     <div class="foto-bar" id="fotoBar">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -849,17 +947,10 @@
     </div>
 
     <div class="toolbar">
-      <h2>Generic Code belum terdisplay</h2>
+      <h2 id="listTitle">Generic Code belum terdisplay</h2>
       <div class="actions">
         <input type="text" class="search-input" id="searchInput" placeholder="Cari generic code / nama artikel / MC...">
-        <select class="m-sort" id="mSort" aria-label="Urutkan">
-          <option value="totalQty:desc">Urutkan: Qty terbanyak</option>
-          <option value="totalQty:asc">Urutkan: Qty tersedikit</option>
-          <option value="skuCount:desc">Urutkan: Jml SKU terbanyak</option>
-          <option value="sampleName:asc">Urutkan: Nama A&ndash;Z</option>
-          <option value="genericCode:asc">Urutkan: Generic Code</option>
-          <option value="mc2:asc">Urutkan: MC LV 2</option>
-        </select>
+        <select class="m-sort" id="mSort" aria-label="Urutkan"></select>
         <button class="btn" id="exportBtn">Export ke Excel</button>
       </div>
     </div>
@@ -868,23 +959,29 @@
       <div class="ms" data-level="mc2"></div>
       <div class="ms" data-level="mc3"></div>
       <div class="ms" data-level="mc4"></div>
+      <label class="an-merge" id="vOnlyWrap" hidden title="Sembunyikan varian dari generic yang belum terdisplay sama sekali (sudah ada di tab Generic)"><input type="checkbox" id="vOnlyDisp"> Hanya warna dari generic yang sudah terdisplay</label>
+      <label class="an-merge" id="dOnlyWrap" hidden><input type="checkbox" id="dOnlyIncomplete"> Hanya yang warnanya belum lengkap</label>
       <button class="btn ghost" id="resetFilterBtn">Reset filter</button>
       <div class="filter-count" id="filterCount"></div>
     </div>
 
     <div id="tableWrap"></div>
 
-    </div><!-- /panelArtikel -->
+    </div><!-- /panelList -->
 
     <div class="tab-panel" id="panelAnalisa" role="tabpanel" aria-labelledby="tabAnalisa" hidden>
       <div class="an-head">
         <h2>Analisa % terdisplay per MC</h2>
-        <p><b>Cara hitung:</b> % terdisplay = jumlah generic yang sudah ada di Selling area &divide; jumlah generic yang punya stok tersedia (Available Qty &gt; 0) di Warehouse. Garis tipis pada bar menandai target 95%. Klik <b>Lihat artikel</b> untuk melihat daftar generic yang belum terdisplay di MC tersebut.</p>
+        <p id="anHelp"></p>
       </div>
 
       <div class="an-kpis" id="anKpis"></div>
 
       <div class="an-controls">
+        <div class="seg" role="group" aria-label="Dasar hitung">
+          <button type="button" data-basis="generic" aria-pressed="true">Per Generic</button>
+          <button type="button" data-basis="varian" aria-pressed="false">Per Varian</button>
+        </div>
         <div class="seg" role="group" aria-label="Level MC">
           <button type="button" data-level="mc3" aria-pressed="true">Per MC LV 3</button>
           <button type="button" data-level="mc4" aria-pressed="false">Per MC LV 4</button>
@@ -994,12 +1091,24 @@
   const selected = {mc2:new Set(), mc3:new Set(), mc4:new Set()};
   const msEls = {};
   const resetFilterBtn = document.getElementById('resetFilterBtn');
+  const vOnlyDisp = document.getElementById('vOnlyDisp');
+  const dOnlyIncomplete = document.getElementById('dOnlyIncomplete');
   const filterCount = document.getElementById('filterCount');
 
   let analysisRows = [];     // semua generic ber-stok di gudang: {gc, mc2, mc3, mc4, shown, qty}
   let anLevel = 'mc3';
   let anMerge = false;   // true = abaikan MC LV 2 (gabungkan semua LV 2)
   let anSort = {key:'pct', dir:'asc'};
+  let analysisRowsV = [];    // varian (generic + warna) ber-stok di gudang: {gc, color, mc2, mc3, mc4, shown, qty}
+  let anBasis = 'generic';   // generic | varian
+  let variantRows = [];      // varian yang belum terdisplay
+  let displayRows = [];      // artikel yang sudah terdisplay (per kelompok produk)
+  let detailByDisplay = {};  // kunci -> baris SKU di Selling area
+  let doubleSets = {all:{rows:[], detail:{}, stats:{}}};  // display double per varian
+  let detailByVariant = {};  // kunci varian -> baris SKU (ukuran)
+  let listMode = 'generic';  // tab daftar yang aktif: generic | varian
+  let sortStates = {generic:{key:'totalQty', dir:'desc'}, varian:{key:'totalQty', dir:'desc'}, display:{key:'totalQty', dir:'desc'}, double:{key:'totalQty', dir:'desc'}};
+  let openRowsBy = {generic:new Set(), varian:new Set(), display:new Set(), double:new Set()};
   let summaryRows = [];      // {genericCode, sampleName, skuCount, totalQty, binCodes, zonesFound}
   let detailByGeneric = {};  // genericCode -> array of raw rows (full column set)
   let allColumns = [];
@@ -1075,6 +1184,11 @@
     };
     const excludedRows = rows.filter(isExcluded);
     rows = rows.filter(r => !isExcluded(r));
+    // Bin Booking (SA-BO...) bukan gudang dan bukan area display: tidak dihitung sama sekali.
+    // Yang dihitung hanya Warehouse dan Selling area.
+    const isBooking = r => (binKey && /^SA-BO/i.test(String(r[binKey] ?? '').trim())) || normalizeZone(r[zoneKey]) === 'booking area';
+    const bookingRows = rows.filter(isBooking);
+    rows = rows.filter(r => !isBooking(r));
 
     // Daftar produk (kode generic + nama) dari export ini, dipakai pembuat gambar.json
     skuNameKeyG = skuNameKey;
@@ -1098,17 +1212,44 @@
     } else {
       exNote.classList.remove('show');
     }
+    if(bookingRows.length){
+      const bkQty = qtyKey ? bookingRows.reduce((a, r) => a + (parseFloat(r[qtyKey]) || 0), 0) : 0;
+      document.getElementById('excludeText').innerHTML +=
+        (exNote.classList.contains('show') ? '<br>' : '') +
+        `<b>${bookingRows.length} baris di bin Booking (SA-BO) tidak dihitung</b>${qtyKey ? ' (' + bkQty.toLocaleString('id-ID') + ' pcs)' : ''}, karena bin Booking bukan gudang dan bukan area display.`;
+      exNote.classList.add('show');
+    }
 
     const warehouseSet = new Set();
     const salesAreaSet = new Set();   // zone Sales Area + bin Selling area (S)
     const zoneSaSet = new Set();      // khusus zone Sales Area, untuk catatan
     const noAvailGeneric = new Set(); // generic yang punya baris gudang dengan Available Qty <= 0
     const genericInfo = {}; // genericCode -> {sampleName, skus:Set, totalQty, bins:Set, rows:[]}
+    // Varian = generic + warna (warna diambil dari nama SKU: "NAMA, WARNA, UKURAN")
+    const whVarSet = new Set(), saVarSet = new Set(), allVarSet = new Set();
+    const varInfo = {};            // kunci varian -> info
+    const saColorsByGen = {};      // kelompok produk -> warna yang sudah ada di Selling area
+    const saGroupSet = new Set();  // kelompok produk yang sudah ada di Selling area
+    const dispInfo = {};           // kelompok produk -> info baris di Selling area
+    const sellList = [];           // semua baris Selling area (untuk deteksi display double)
+    // Generic "keranjang campur" (satu kode dipakai banyak produk berbeda, mis. 990000492): untuk Varian
+    // dipisah per nama produk supaya warna produk berbeda tidak tercampur. Generic biasa tidak berubah.
+    const namesByGen = {};
+    if(skuNameKey) rows.forEach(r => {
+      const g0 = String(r[genericKey] ?? '').trim();
+      if(g0) (namesByGen[g0] = namesByGen[g0] || new Set()).add(String(r[skuNameKey] ?? '').split(',')[0].trim());
+    });
+    const bucketGen = new Set(Object.keys(namesByGen).filter(g0 => namesByGen[g0].size >= 10));
+    const groupKeyOf = (g0, r) => bucketGen.has(g0) ? g0 + '#' + String(r[skuNameKey] ?? '').split(',')[0].trim() : g0;
 
     rows.forEach(r => {
       const gc = String(r[genericKey] ?? '').trim();
       if(!gc) return;
       const zoneNorm = normalizeZone(r[zoneKey]);
+      const vcol = skuColor(r);
+      const gk = groupKeyOf(gc, r);
+      const vk = gk + '|' + vcol;
+      allVarSet.add(vk);
 
       // Stok gudang hanya dihitung bila Available Qty > 0.
       // Barang yang sudah teralokasi / booking (available 0 atau minus) tidak bisa dipajang.
@@ -1119,10 +1260,29 @@
       }
       const whAvailable = zoneNorm === 'warehouse' && (whQty === null || whQty > 0);
       if(zoneNorm === 'warehouse' && !whAvailable) noAvailGeneric.add(gc);
-      if(whAvailable) warehouseSet.add(gc);
+      if(whAvailable){ warehouseSet.add(gc); whVarSet.add(vk); }
       // Terhitung terdisplay bila zone-nya Sales Area ATAU bin-nya bin Selling area (awalan S, mis. SA-, SB-, SH-)
       if(zoneNorm === 'sales area'){ salesAreaSet.add(gc); zoneSaSet.add(gc); }
       else if(binKey && isSellingBin(r[binKey])){ salesAreaSet.add(gc); }
+      if(zoneNorm === 'sales area' || (binKey && isSellingBin(r[binKey]))){
+        saVarSet.add(vk);
+        saGroupSet.add(gk);
+        (saColorsByGen[gk] = saColorsByGen[gk] || new Set()).add(vcol);
+        // info artikel yang sudah terdisplay
+        if(!dispInfo[gk]) dispInfo[gk] = {gc: gc, gk: gk, sampleName:null, mc2:'', mc3:'', mc4:'', skus:new Set(), qty:0, bins:new Set(), rows:[], colorQty:{}};
+        const di = dispInfo[gk];
+        if(!di.sampleName && skuNameKey) di.sampleName = r[skuNameKey];
+        if(!di.mc2 && mc2Key && String(r[mc2Key]).trim()) di.mc2 = String(r[mc2Key]).trim();
+        if(!di.mc3 && mc3Key && String(r[mc3Key]).trim()) di.mc3 = String(r[mc3Key]).trim();
+        if(!di.mc4 && mc4Key && String(r[mc4Key]).trim()) di.mc4 = String(r[mc4Key]).trim();
+        if(skuCodeKey) di.skus.add(r[skuCodeKey]);
+        if(binKey && r[binKey]) di.bins.add(r[binKey]);
+        const dq = qtyKey ? (parseFloat(r[qtyKey]) || 0) : 0;
+        di.qty += dq;
+        if(vcol) di.colorQty[vcol] = (di.colorQty[vcol] || 0) + dq;
+        di.rows.push(r);
+        sellList.push({r: r, gc: gc, gk: gk, vk: vk, color: vcol, zone: zoneNorm});
+      }
 
       if(!genericInfo[gc]){
         genericInfo[gc] = {sampleName:null, mc2:'', mc3:'', mc4:'', skus:new Set(), totalQty:0, bins:new Set(), rows:[]};
@@ -1140,6 +1300,21 @@
           if(!isNaN(q)) info.totalQty += q;
         }
         info.rows.push(r);
+
+        // info per varian
+        if(!varInfo[vk]) varInfo[vk] = {gc: gc, gk: gk, bucket: bucketGen.has(gc), color: vcol, sampleName:null, mc2:'', mc3:'', mc4:'', skus:new Set(), totalQty:0, bins:new Set(), rows:[]};
+        const vi = varInfo[vk];
+        if(!vi.sampleName && skuNameKey) vi.sampleName = r[skuNameKey];
+        if(!vi.mc2 && mc2Key && String(r[mc2Key]).trim()) vi.mc2 = String(r[mc2Key]).trim();
+        if(!vi.mc3 && mc3Key && String(r[mc3Key]).trim()) vi.mc3 = String(r[mc3Key]).trim();
+        if(!vi.mc4 && mc4Key && String(r[mc4Key]).trim()) vi.mc4 = String(r[mc4Key]).trim();
+        if(skuCodeKey) vi.skus.add(r[skuCodeKey]);
+        if(binKey && r[binKey]) vi.bins.add(r[binKey]);
+        if(qtyKey){
+          const q2 = parseFloat(r[qtyKey]);
+          if(!isNaN(q2)) vi.totalQty += q2;
+        }
+        vi.rows.push(r);
       }
     });
 
@@ -1169,13 +1344,14 @@
     if(viaSellingBin){
       document.getElementById('excludeText').innerHTML +=
         (exNote.classList.contains('show') ? '<br>' : '') +
-        `<b>${viaSellingBin} generic dianggap sudah terdisplay</b> karena berada di bin Selling area (awalan S, mis. SA-BO / SA-TR) walau zone-nya bukan Sales Area.`;
+        `<b>${viaSellingBin} generic dianggap sudah terdisplay</b> karena berada di bin Selling area (awalan S, mis. SA-TR) walau zone-nya bukan Sales Area.`;
       exNote.classList.add('show');
     }
 
     summaryRows = missing.map(gc => {
       const info = genericInfo[gc];
       return {
+        rowKey: gc,
         genericCode: gc,
         sampleName: info.sampleName || '(nama tidak tersedia)',
         mc2: info.mc2 || '-',
@@ -1193,6 +1369,132 @@
     });
     detailByGeneric = {};
     missing.forEach(gc => { detailByGeneric[gc] = genericInfo[gc].rows; });
+
+    // ----- varian yang belum terdisplay (generic + warna tidak ada di Selling area) -----
+    const missingVar = [...whVarSet].filter(vk => !saVarSet.has(vk));
+    variantRows = missingVar.map(vk => {
+      const vi = varInfo[vk];
+      const gdisp = saGroupSet.has(vi.gk);
+      return {
+        rowKey: vk,
+        genericCode: vi.gc,
+        color: vi.color,
+        colorLabel: vi.color || '(tanpa warna)',
+        sampleName: vi.sampleName || '(nama tidak tersedia)',
+        mc2: vi.mc2 || '-',
+        mc3: vi.mc3 || '-',
+        mc4: vi.mc4 || '-',
+        skuCount: vi.skus.size || vi.rows.length,
+        totalQty: vi.totalQty,
+        binCodes: [...vi.bins].sort().join(', '),
+        colors: vi.color ? [vi.color] : [],
+        genDisplayed: gdisp,
+        isBucket: vi.bucket,
+        groupKey: vi.gk,
+        dispColors: [...(saColorsByGen[vi.gk] || [])].filter(Boolean).sort()
+      };
+    });
+    detailByVariant = {};
+    missingVar.forEach(vk => { detailByVariant[vk] = varInfo[vk].rows; });
+    analysisRowsV = [...whVarSet].map(vk => {
+      const vi = varInfo[vk];
+      return {gc: vi.gc, color: vi.color, mc2: vi.mc2 || '-', mc3: vi.mc3 || '-', mc4: vi.mc4 || '-', shown: saVarSet.has(vk), qty: vi.totalQty};
+    });
+    const varMissingQty = variantRows.reduce((a, r) => a + r.totalQty, 0);
+    const colorGap = variantRows.filter(r => r.genDisplayed).length;
+    document.getElementById('statVTotal').textContent = fmtNum(allVarSet.size);
+    document.getElementById('statVWh').textContent = fmtNum(whVarSet.size);
+    document.getElementById('statVSa').textContent = fmtNum(saVarSet.size);
+    document.getElementById('statVMissing').textContent = fmtNum(variantRows.length);
+    updateCoverage(whVarSet.size, variantRows.length, varMissingQty, {
+      sfx: 'V', unit: 'varian',
+      extra: variantRows.length ? `Dari jumlah itu, <b>${fmtNum(colorGap)} varian</b> berasal dari generic yang sudah terdisplay (warna lain sudah dipajang, warna ini belum), dan <b>${fmtNum(variantRows.length - colorGap)} varian</b> dari generic yang belum terdisplay sama sekali.` : ''
+    });
+    // ----- artikel yang sudah terdisplay -----
+    const whQtyByGroup = {};
+    Object.keys(varInfo).forEach(k => { const vi = varInfo[k]; whQtyByGroup[vi.gk] = (whQtyByGroup[vi.gk] || 0) + vi.totalQty; });
+    const missColorsByGroup = {};
+    missingVar.forEach(k => { const vi = varInfo[k]; (missColorsByGroup[vi.gk] = missColorsByGroup[vi.gk] || []).push(vi.color || '(tanpa warna)'); });
+    detailByDisplay = {};
+    displayRows = Object.keys(dispInfo).map(gk => {
+      const di = dispInfo[gk];
+      const gi = genericInfo[di.gc] || {};
+      const cq = di.colorQty;
+      const miss = (missColorsByGroup[gk] || []).slice().sort();
+      const key = 'D|' + gk;
+      detailByDisplay[key] = di.rows;
+      return {
+        rowKey: key,
+        genericCode: di.gc,
+        sampleName: di.sampleName || '(nama tidak tersedia)',
+        mc2: di.mc2 || gi.mc2 || '-',
+        mc3: di.mc3 || gi.mc3 || '-',
+        mc4: di.mc4 || gi.mc4 || '-',
+        skuCount: di.skus.size || di.rows.length,
+        totalQty: di.qty,
+        whQty: whQtyByGroup[gk] || 0,
+        binCodes: [...di.bins].sort().join(', '),
+        colors: Object.keys(cq).sort((a, b) => cq[b] - cq[a]),
+        dispColors: Object.keys(cq).sort(),
+        missColors: miss,
+        complete: miss.length === 0,
+        isBucket: bucketGen.has(di.gc)
+      };
+    });
+    // ----- display double: varian dengan qty di Selling area >= 2 -----
+    const buildDouble = (skipBooking) => {
+      const vm = {};
+      sellList.forEach(o => {
+        if(skipBooking && o.zone === 'booking area') return;
+        const r = o.r;
+        if(!vm[o.vk]) vm[o.vk] = {gc: o.gc, gk: o.gk, color: o.color, sampleName: null, mc2:'', mc3:'', mc4:'', skus: new Set(), bins: new Set(), qty: 0, rows: []};
+        const x = vm[o.vk];
+        if(!x.sampleName && skuNameKey) x.sampleName = r[skuNameKey];
+        if(!x.mc2 && mc2Key && String(r[mc2Key]).trim()) x.mc2 = String(r[mc2Key]).trim();
+        if(!x.mc3 && mc3Key && String(r[mc3Key]).trim()) x.mc3 = String(r[mc3Key]).trim();
+        if(!x.mc4 && mc4Key && String(r[mc4Key]).trim()) x.mc4 = String(r[mc4Key]).trim();
+        if(skuCodeKey) x.skus.add(r[skuCodeKey]);
+        if(binKey && r[binKey]) x.bins.add(r[binKey]);
+        x.qty += qtyKey ? (parseFloat(r[qtyKey]) || 0) : 0;
+        x.rows.push(r);
+      });
+      const keys = Object.keys(vm);
+      const detail = {};
+      const rowsX = keys.filter(k => vm[k].qty >= 2).map(k => {
+        const x = vm[k];
+        const key = 'X|' + k;
+        detail[key] = x.rows;
+        return {
+          rowKey: key,
+          genericCode: x.gc,
+          color: x.color,
+          colorLabel: x.color || '(tanpa warna)',
+          sampleName: x.sampleName || '(nama tidak tersedia)',
+          mc2: x.mc2 || '-', mc3: x.mc3 || '-', mc4: x.mc4 || '-',
+          skuCount: x.skus.size || x.rows.length,
+          totalQty: x.qty,
+          excess: x.qty - 1,
+          binCount: x.bins.size,
+          binCodes: [...x.bins].sort().join(', '),
+          colors: x.color ? [x.color] : [],
+          isBucket: bucketGen.has(x.gc)
+        };
+      });
+      return {rows: rowsX, detail: detail, stats: {
+        disp: keys.length,
+        one: keys.filter(k => vm[k].qty === 1).length,
+        dbl: rowsX.length,
+        excess: rowsX.reduce((a, r) => a + r.excess, 0)
+      }};
+    };
+    doubleSets = {all: buildDouble(false)};
+
+    const dFull = displayRows.filter(r => r.complete).length;
+    document.getElementById('statDCount').textContent = fmtNum(displayRows.length);
+    document.getElementById('statDQty').textContent = fmtNum(displayRows.reduce((a, r) => a + r.totalQty, 0));
+    document.getElementById('statDFull').textContent = fmtNum(dFull);
+    document.getElementById('statDPart').textContent = fmtNum(displayRows.length - dFull);
+
     allColumns = skuCodeKey || skuNameKey || binKey || qtyKey
       ? [skuCodeKey, skuNameKey, mc2Key, mc3Key, mc4Key, binKey, qtyKey].filter(Boolean)
       : Object.keys(rows[0]);
@@ -1203,8 +1505,15 @@
     document.getElementById('statMissing').textContent = missing.length;
     updateCoverage(warehouseSet.size, missing.length, missing.reduce((a,gc) => a + genericInfo[gc].totalQty, 0));
 
-    openRows = new Set();
-    sortState = {key:'totalQty', dir:'desc'};
+    listMode = 'generic';
+    sortStates = {generic:{key:'totalQty', dir:'desc'}, varian:{key:'totalQty', dir:'desc'}, display:{key:'totalQty', dir:'desc'}, double:{key:'totalQty', dir:'desc'}};
+    sortState = sortStates.generic;
+    openRowsBy = {generic:new Set(), varian:new Set(), display:new Set(), double:new Set()};
+    openRows = openRowsBy.generic;
+    vOnlyDisp.checked = false;
+    dOnlyIncomplete.checked = false;
+    updateDoubleStats();
+    applyModeUi();
     LEVELS.forEach(l => selected[l].clear());
     refreshFilterOptions();
     // Data untuk tab Analisa: semua generic ber-stok di gudang, ditandai sudah/belum terdisplay
@@ -1212,7 +1521,10 @@
       const info = genericInfo[gc];
       return {gc, mc2: info.mc2 || '-', mc3: info.mc3 || '-', mc4: info.mc4 || '-', shown: salesAreaSet.has(gc), qty: info.totalQty};
     });
-    document.getElementById('tabBadge').textContent = missing.length;
+    document.getElementById('tabBadge').textContent = fmtNum(missing.length);
+    document.getElementById('tabBadgeV').textContent = fmtNum(variantRows.length);
+    document.getElementById('tabBadgeD').textContent = fmtNum(displayRows.length);
+    anBasis = 'generic';
     anLevel = 'mc3';
     anMerge = false;
     document.getElementById('anMerge').checked = false;
@@ -1222,7 +1534,7 @@
     document.getElementById('anSearch').value = '';
     populateAnMc2();
     syncAnControls();
-    switchTab('artikel');
+    switchTab('generic');
     resultsArea.style.display = 'block';
     renderTable();
     renderAnalysis();
@@ -1258,7 +1570,7 @@
 
   // Cari foto untuk satu generic. `colors` = warna di toko (urut prioritas). Cocok persis dengan kode warna master;
   // bila tidak ada, dipakai warna pertama di master sebagai foto referensi.
-  function imgInfo(gc, colors){
+  function imgInfo(gc, colors, exactOnly){
     if(!imgDB) return null;
     const item = imgDB.items[gc];
     if(!item || !item.c) return null;
@@ -1270,14 +1582,17 @@
       const hit = names.find(n => n.toUpperCase() === w);
       if(hit){ color = hit; exact = true; break; }
     }
-    if(!color) color = names[0];
+    if(!color){
+      if(exactOnly) return null;   // tab Varian: jangan tampilkan foto warna lain di daftar
+      color = names[0];
+    }
     const urls = (item.c[color] || []).map(decodeImg).filter(Boolean);
     if(!urls.length) return null;
     return {names, color, exact, urls};
   }
 
-  function thumbHtml(gc, name, colors){
-    const info = imgInfo(gc, colors);
+  function thumbHtml(gc, name, colors, exactOnly){
+    const info = imgInfo(gc, colors, exactOnly);
     const attrs = `data-gc="${escapeAttr(gc)}" data-name="${escapeAttr(name)}" data-colors="${escapeAttr((colors || []).join(','))}"`;
     if(info){
       return `<button type="button" class="thumb" ${attrs} aria-label="Lihat foto ${escapeAttr(name)}"><img class="thumb-img" src="${escapeAttr(sized(info.urls[0], 200))}" data-orig="${escapeAttr(info.urls[0])}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></button>`;
@@ -1308,7 +1623,7 @@
 
   function onImagesChanged(){
     updateFotoBar();
-    if(summaryRows.length && resultsArea.style.display !== 'none') renderTable();
+    if((summaryRows.length || variantRows.length || displayRows.length || doubleSets.all.rows.length) && resultsArea.style.display !== 'none') renderTable();
   }
 
   function updateFotoBar(){
@@ -1317,8 +1632,10 @@
     const btn = document.getElementById('fotoBtn');
     bar.classList.toggle('ok', imgState === 'ok');
     if(imgState === 'ok'){
-      const have = summaryRows.filter(r => imgInfo(r.genericCode, r.colors)).length;
-      txt.innerHTML = `<b>Foto produk aktif</b> &middot; ${fmtNum(have)} dari ${fmtNum(summaryRows.length)} generic di daftar ini punya foto`;
+      const isV = listMode === 'varian' || listMode === 'double';
+      const list = curRows();
+      const have = list.filter(r => imgInfo(r.genericCode, r.colors, isV && r.colors.length > 0)).length;
+      txt.innerHTML = `<b>Foto produk aktif</b> &middot; ${fmtNum(have)} dari ${fmtNum(list.length)} ${MODE_UNIT[listMode]} di daftar ini punya foto`;
       btn.textContent = 'Perbarui foto';
     } else if(imgState === 'loading'){
       txt.textContent = 'Memeriksa foto produk\u2026';
@@ -1467,9 +1784,60 @@
   // ===== Tab =====
   function switchTab(name){
     document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
-    document.getElementById('panelArtikel').hidden = name !== 'artikel';
+    document.getElementById('panelGeneric').hidden = name !== 'generic';
+    document.getElementById('panelVarian').hidden = name !== 'varian';
+    document.getElementById('panelDisplay').hidden = name !== 'display';
+    document.getElementById('panelDouble').hidden = name !== 'double';
+    document.getElementById('panelList').hidden = name === 'analisa';
     document.getElementById('panelAnalisa').hidden = name !== 'analisa';
+    if(name !== 'analisa' && name !== listMode) setListMode(name);
   }
+
+  // Daftar (tabel) dipakai bersama oleh tab Generic dan tab Varian; filter MC & pencarian ikut terbawa.
+  function setListMode(mode){
+    sortStates[listMode] = sortState;
+    openRowsBy[listMode] = openRows;
+    listMode = mode;
+    sortState = sortStates[mode];
+    openRows = openRowsBy[mode];
+    applyModeUi();
+    refreshFilterOptions();
+    renderTable();
+    updateFotoBar();
+  }
+
+  const MODE_SORT_OPTS = {
+    generic: [['totalQty:desc','Qty terbanyak'], ['totalQty:asc','Qty tersedikit'], ['skuCount:desc','Jml SKU terbanyak'], ['sampleName:asc','Nama A\u2013Z'], ['genericCode:asc','Generic Code'], ['mc2:asc','MC LV 2']],
+    varian:  [['totalQty:desc','Qty terbanyak'], ['totalQty:asc','Qty tersedikit'], ['skuCount:desc','Jml SKU terbanyak'], ['sampleName:asc','Nama A\u2013Z'], ['color:asc','Warna A\u2013Z'], ['genericCode:asc','Generic Code'], ['mc2:asc','MC LV 2']],
+    double:  [['totalQty:desc','Qty display terbanyak'], ['skuCount:desc','Jml SKU terbanyak'], ['binCount:desc','Jumlah bin terbanyak'], ['sampleName:asc','Nama A\u2013Z'], ['color:asc','Warna A\u2013Z'], ['genericCode:asc','Generic Code'], ['mc2:asc','MC LV 2']],
+    display: [['totalQty:desc','Qty display terbanyak'], ['totalQty:asc','Qty display tersedikit'], ['whQty:desc','Qty gudang terbanyak'], ['skuCount:desc','Jml SKU terbanyak'], ['sampleName:asc','Nama A\u2013Z'], ['genericCode:asc','Generic Code'], ['mc2:asc','MC LV 2']]
+  };
+  const MODE_UNIT = {generic:'generic', varian:'varian', display:'artikel', double:'varian'};
+  const MODE_TITLE = {generic:'Generic Code belum terdisplay', varian:'Varian (generic + warna) belum terdisplay', display:'Artikel yang sudah terdisplay', double:'Varian dengan qty display lebih dari 1'};
+  function applyModeUi(){
+    const isV = listMode === 'varian';
+    document.getElementById('listTitle').textContent = MODE_TITLE[listMode];
+    searchInput.placeholder = listMode === 'generic' ? 'Cari generic code / nama artikel / MC...' : 'Cari generic code / nama artikel / warna / MC...';
+    document.getElementById('vOnlyWrap').hidden = !isV;
+    document.getElementById('dOnlyWrap').hidden = listMode !== 'display';
+    document.getElementById('mSort').innerHTML = MODE_SORT_OPTS[listMode].map(o => `<option value="${o[0]}">Urutkan: ${o[1]}</option>`).join('');
+  }
+  const activeDouble = () => doubleSets.all;
+  const curRows = () => listMode === 'varian' ? variantRows : (listMode === 'display' ? displayRows : (listMode === 'double' ? activeDouble().rows : summaryRows));
+  function updateDoubleStats(){
+    const st = activeDouble().stats;
+    document.getElementById('statXDisp').textContent = fmtNum(st.disp || 0);
+    document.getElementById('statXOne').textContent = fmtNum(st.one || 0);
+    document.getElementById('statXDbl').textContent = fmtNum(st.dbl || 0);
+    document.getElementById('statXExcess').textContent = fmtNum(st.excess || 0);
+    document.getElementById('tabBadgeX').textContent = fmtNum(st.dbl || 0);
+  }
+  // baris dasar daftar (setelah centang khusus tab)
+  const baseRows = () => {
+    if(listMode === 'varian' && vOnlyDisp.checked) return variantRows.filter(r => r.genDisplayed);
+    if(listMode === 'display' && dOnlyIncomplete.checked) return displayRows.filter(r => !r.complete);
+    return curRows();
+  };
 
   // ===== Analisa % terdisplay per MC =====
   const anWrap = document.getElementById('anTableWrap');
@@ -1481,9 +1849,14 @@
   const fmtPct = p => (p >= 100 ? '100%' : p.toFixed(1).replace('.', ',') + '%');
   const fmtNum = n => Number(n).toLocaleString('id-ID');
 
-  function buildGroups(level){
+  const curAnRows = () => anBasis === 'varian' ? analysisRowsV : analysisRows;
+  const capFirst = t => t.charAt(0).toUpperCase() + t.slice(1);
+
+  function buildGroups(level, basis){
+    const b = basis || anBasis;
+    const src = b === 'varian' ? analysisRowsV : analysisRows;
     const map = new Map();
-    analysisRows.forEach(r => {
+    src.forEach(r => {
       let key;
       if(anMerge) key = level === 'mc3' ? r.mc3 : [r.mc3, r.mc4].join('\u0001');
       else key = level === 'mc3' ? [r.mc2, r.mc3].join('\u0001') : [r.mc2, r.mc3, r.mc4].join('\u0001');
@@ -1508,7 +1881,7 @@
   function populateAnMc2(){
     const cur = anMc2.value;
     const counts = {};
-    analysisRows.forEach(r => { counts[r.mc2] = (counts[r.mc2] || 0) + 1; });
+    curAnRows().forEach(r => { counts[r.mc2] = (counts[r.mc2] || 0) + 1; });
     const keys = Object.keys(counts).sort((a,b) => a.localeCompare(b));
     anMc2.innerHTML = '<option value="">Semua MC LV 2</option>' +
       keys.map(k => `<option value="${escapeAttr(k)}">${escapeHtml(mcName(k))} (${counts[k]})</option>`).join('');
@@ -1516,15 +1889,22 @@
   }
 
   function syncAnControls(){
-    document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.level === anLevel)));
+    document.querySelectorAll('.seg button[data-level]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.level === anLevel)));
+    document.querySelectorAll('.seg button[data-basis]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.basis === anBasis)));
     const v = anSort.key + ':' + anSort.dir;
     if([...anSortSel.options].some(o => o.value === v)) anSortSel.value = v;
   }
 
   let anShown = [];
   function renderAnalysis(){
-    if(!analysisRows.length){
-      anWrap.innerHTML = '<div class="empty-state"><div class="big">Belum ada data</div>Tidak ada generic ber-stok di Warehouse.</div>';
+    const unit = anBasis === 'varian' ? 'varian' : 'generic';
+    const Unit = capFirst(unit);
+    document.getElementById('anHelp').innerHTML = anBasis === 'varian'
+      ? '<b>Cara hitung (per Varian):</b> % terdisplay = jumlah varian (generic + warna) yang sudah ada di Selling area &divide; jumlah varian yang punya stok tersedia (Available Qty &gt; 0) di Warehouse. Varian dianggap terdisplay bila generic dengan warna yang sama ada di Selling area. Garis tipis pada bar menandai target 95%. Klik <b>Lihat varian</b> untuk melihat daftar varian yang belum terdisplay di MC tersebut.'
+      : '<b>Cara hitung (per Generic):</b> % terdisplay = jumlah generic yang sudah ada di Selling area &divide; jumlah generic yang punya stok tersedia (Available Qty &gt; 0) di Warehouse. Garis tipis pada bar menandai target 95%. Klik <b>Lihat generic</b> untuk melihat daftar generic yang belum terdisplay di MC tersebut.';
+    const src = curAnRows();
+    if(!src.length){
+      anWrap.innerHTML = `<div class="empty-state"><div class="big">Belum ada data</div>Tidak ada ${unit} ber-stok di Warehouse.</div>`;
       document.getElementById('anKpis').innerHTML = '';
       document.getElementById('anCount').innerHTML = '';
       return;
@@ -1534,14 +1914,14 @@
     let groups = buildGroups(anLevel).filter(g => !mc2f || g.mc2 === mc2f);
 
     // KPI mengikuti filter MC LV 2
-    const scoped = analysisRows.filter(r => !mc2f || r.mc2 === mc2f);
+    const scoped = src.filter(r => !mc2f || r.mc2 === mc2f);
     const scopedShown = scoped.filter(r => r.shown).length;
     const overall = scoped.length ? (scopedShown / scoped.length) * 100 : 100;
     const reachedN = groups.filter(g => g.reached).length;
     const belowN = groups.length - reachedN;
     const lowest = groups.filter(g => !g.reached).sort((a,b) => a.pct - b.pct || b.miss - a.miss)[0];
     document.getElementById('anKpis').innerHTML = `
-      <div class="kpi ${overall >= DISPLAY_TARGET ? 'good' : ''}"><div class="k-num">${fmtPct(overall)}</div><div class="k-lbl">Display ${mc2f ? escapeHtml(mcName(mc2f)) : 'keseluruhan'} &middot; ${fmtNum(scopedShown)} dari ${fmtNum(scoped.length)} generic</div></div>
+      <div class="kpi ${overall >= DISPLAY_TARGET ? 'good' : ''}"><div class="k-num">${fmtPct(overall)}</div><div class="k-lbl">Display ${unit} ${mc2f ? escapeHtml(mcName(mc2f)) : 'keseluruhan'} &middot; ${fmtNum(scopedShown)} dari ${fmtNum(scoped.length)} ${unit}</div></div>
       <div class="kpi good"><div class="k-num">${reachedN} <span style="font-size:15px;font-weight:700;">dari ${groups.length}</span></div><div class="k-lbl">${levelLabel} sudah capai target ${DISPLAY_TARGET}%</div></div>
       <div class="kpi ${belowN ? 'warn' : 'good'}"><div class="k-num">${belowN}</div><div class="k-lbl">${levelLabel} di bawah target${lowest ? ' &middot; terendah: ' + escapeHtml(lowest.name) + ' ' + fmtPct(lowest.pct) : ''}</div></div>`;
 
@@ -1568,7 +1948,7 @@
     const tot = groups.reduce((a,g) => ({wh:a.wh+g.wh, shown:a.shown+g.shown, miss:a.miss+g.miss, qty:a.qty+g.missQty}), {wh:0, shown:0, miss:0, qty:0});
     const totPct = tot.wh ? (tot.shown / tot.wh) * 100 : 0;
     document.getElementById('anCount').innerHTML =
-      `Menampilkan <strong>${groups.length}</strong> ${levelLabel} &middot; ${fmtNum(tot.wh)} generic, ${fmtNum(tot.shown)} sudah terdisplay (<strong>${tot.wh ? fmtPct(totPct) : '-'}</strong>)`;
+      `Menampilkan <strong>${groups.length}</strong> ${levelLabel} &middot; ${fmtNum(tot.wh)} ${unit}, ${fmtNum(tot.shown)} sudah terdisplay (<strong>${tot.wh ? fmtPct(totPct) : '-'}</strong>)`;
 
     if(!groups.length){
       anWrap.innerHTML = '<div class="empty-state"><div class="big">Tidak ada hasil</div>Coba ubah filter, status, atau kata kunci pencarian.</div>';
@@ -1590,14 +1970,14 @@
         <td class="num-cell a-miss" data-l="Belum">${fmtNum(g.miss)}</td>
         <td class="a-pct"><div class="pct-line"><b>${fmtPct(g.pct)}</b><span class="hint">${hint}</span></div><div class="mini-bar"><i style="width:${Math.min(100, g.pct)}%"></i><u></u></div></td>
         <td class="num-cell a-qty" data-l="Qty belum">${fmtNum(g.missQty)}</td>
-        <td class="a-act"><button type="button" class="link-btn" data-i="${i}" ${g.miss ? '' : 'disabled'}>Lihat artikel &rarr;</button></td>
+        <td class="a-act"><button type="button" class="link-btn" data-i="${i}" ${g.miss ? '' : 'disabled'}>Lihat ${unit} &rarr;</button></td>
       </tr>`;
     }).join('');
 
     anWrap.innerHTML = `<div class="table-scroll an-wrap"><table class="an-table">
       <thead><tr>
         <th data-ansort="name">${levelLabel} ${arrow('name')}</th>
-        <th data-ansort="wh" style="text-align:right">Generic di Gudang ${arrow('wh')}</th>
+        <th data-ansort="wh" style="text-align:right">${Unit} di Gudang ${arrow('wh')}</th>
         <th data-ansort="shown" style="text-align:right">Sudah Terdisplay ${arrow('shown')}</th>
         <th data-ansort="miss" style="text-align:right">Belum Terdisplay ${arrow('miss')}</th>
         <th data-ansort="pct">% Terdisplay ${arrow('pct')}</th>
@@ -1617,36 +1997,39 @@
     </table></div>`;
   }
 
-  // Lompat ke tab Artikel dengan filter MC yang dipilih
+  // Lompat ke tab Generic / Varian dengan filter MC yang dipilih
   function openArticles(g){
+    const target = anBasis === 'varian' ? 'varian' : 'generic';
+    switchTab(target);
     LEVELS.forEach(l => selected[l].clear());
     if(g.mc2 !== null) selected.mc2.add(g.mc2);
     selected.mc3.add(g.mc3);
     if(g.mc4 !== null) selected.mc4.add(g.mc4);
     searchInput.value = '';
+    vOnlyDisp.checked = false;      // supaya jumlah di daftar sama dengan angka "Belum Terdisplay" di analisa
     openRows = new Set();
     refreshFilterOptions();
     renderTable();
-    switchTab('artikel');
     requestAnimationFrame(() => document.querySelector('.toolbar').scrollIntoView({behavior:'smooth', block:'start'}));
   }
 
   function exportAnalysis(){
-    if(!analysisRows.length){ alert('Tidak ada data untuk diexport.'); return; }
+    if(!analysisRows.length && !analysisRowsV.length){ alert('Tidak ada data untuk diexport.'); return; }
     const wb = XLSX.utils.book_new();
-    [['mc3','Analisa MC LV 3'], ['mc4','Analisa MC LV 4']].forEach(([level, sheetName]) => {
-      const groups = buildGroups(level).sort((a,b) => a.pct - b.pct || b.miss - a.miss);
+    [['generic','mc3','Generic - MC LV 3'], ['generic','mc4','Generic - MC LV 4'], ['varian','mc3','Varian - MC LV 3'], ['varian','mc4','Varian - MC LV 4']].forEach(([basis, level, sheetName]) => {
+      const Unit = capFirst(basis);
+      const groups = buildGroups(level, basis).sort((a,b) => a.pct - b.pct || b.miss - a.miss);
       const data = groups.map(g => {
         const o = {};
         if(!anMerge) o['MC LV 2'] = mcName(g.mc2);
         o['MC LV 3'] = mcName(g.mc3);
         if(level === 'mc4') o['MC LV 4'] = mcName(g.mc4);
-        o['Generic di Gudang'] = g.wh;
+        o[Unit + ' di Gudang'] = g.wh;
         o['Sudah Terdisplay'] = g.shown;
         o['Belum Terdisplay'] = g.miss;
         o['% Terdisplay'] = g.wh ? g.shown / g.wh : 0;
         o['Status vs Target ' + DISPLAY_TARGET + '%'] = g.reached ? 'Tercapai' : 'Di bawah target';
-        o['Butuh Generic Lagi'] = g.need;
+        o['Butuh ' + Unit + ' Lagi'] = g.need;
         o['Qty Belum Terdisplay (Available)'] = g.missQty;
         return o;
       });
@@ -1666,38 +2049,42 @@
   // ===== Progres display + pesan semangat =====
   const DISPLAY_TARGET = 95; // target minimal % generic terdisplay
 
-  function updateCoverage(whCount, missingCount, missingQty){
+  function updateCoverage(whCount, missingCount, missingQty, cfg){
+    cfg = cfg || {};
+    const sfx = cfg.sfx || '', unit = cfg.unit || 'generic';
     const displayed = whCount - missingCount;
     const pct = whCount ? (displayed / whCount) * 100 : 100;
     const pctTxt = (pct === 100 ? '100' : pct.toFixed(1).replace('.', ',')) + '%';
-    // berapa generic lagi yang harus dipajang supaya target tercapai
+    // berapa lagi yang harus dipajang supaya target tercapai
     const need = Math.max(0, Math.ceil(whCount * DISPLAY_TARGET / 100 - 1e-9) - displayed);
     const reached = pct >= DISPLAY_TARGET;
     const qtyTxt = missingQty.toLocaleString('id-ID');
+    const nf = n => Number(n).toLocaleString('id-ID');
 
     let msg, sub;
     if(missingCount === 0){
-      msg = 'Sempurna! 100% generic terdisplay, melampaui target 95%. Pertahankan, tim!';
-      sub = 'Semua generic yang ada di gudang sudah punya wakil di Sales Area. Peluang sales terbuka penuh.';
+      msg = `Sempurna! 100% ${unit} terdisplay, melampaui target 95%. Pertahankan, tim!`;
+      sub = `Semua ${unit} yang ada di gudang sudah punya wakil di Sales Area. Peluang sales terbuka penuh.`;
     } else if(reached){
       msg = 'Target 95% tercapai! Mantap, tim. Pertahankan dan terus lengkapi display.';
-      sub = `<b>${displayed}</b> dari <b>${whCount}</b> generic di gudang sudah terdisplay. Sisa <b>${missingCount} generic</b> (<b>${qtyTxt} pcs</b>) masih bisa jadi tambahan sales kalau ikut dipajang.`;
+      sub = `<b>${nf(displayed)}</b> dari <b>${nf(whCount)}</b> ${unit} di gudang sudah terdisplay. Sisa <b>${nf(missingCount)} ${unit}</b> (<b>${qtyTxt} pcs</b>) masih bisa jadi tambahan sales kalau ikut dipajang.`;
     } else if(pct >= 90){
-      msg = `Tinggal sedikit lagi! Pajang ${need} generic lagi dan target 95% tercapai.`;
-      sub = `<b>${displayed}</b> dari <b>${whCount}</b> generic di gudang sudah terdisplay. Masih ada <b>${missingCount} generic</b> (<b>${qtyTxt} pcs</b>) yang menunggu dipajang.`;
+      msg = `Tinggal sedikit lagi! Pajang ${nf(need)} ${unit} lagi dan target 95% tercapai.`;
+      sub = `<b>${nf(displayed)}</b> dari <b>${nf(whCount)}</b> ${unit} di gudang sudah terdisplay. Masih ada <b>${nf(missingCount)} ${unit}</b> (<b>${qtyTxt} pcs</b>) yang menunggu dipajang.`;
     } else if(pct >= 80){
-      msg = `Sudah di jalur yang benar. Butuh ${need} generic lagi untuk mencapai target 95%, ayo kejar!`;
-      sub = `<b>${displayed}</b> dari <b>${whCount}</b> generic di gudang sudah terdisplay. Masih ada <b>${missingCount} generic</b> (<b>${qtyTxt} pcs</b>) yang menunggu dipajang. Mulai dari qty terbesar supaya dampaknya ke sales paling terasa.`;
+      msg = `Sudah di jalur yang benar. Butuh ${nf(need)} ${unit} lagi untuk mencapai target 95%, ayo kejar!`;
+      sub = `<b>${nf(displayed)}</b> dari <b>${nf(whCount)}</b> ${unit} di gudang sudah terdisplay. Masih ada <b>${nf(missingCount)} ${unit}</b> (<b>${qtyTxt} pcs</b>) yang menunggu dipajang. Mulai dari qty terbesar supaya dampaknya ke sales paling terasa.`;
     } else {
-      msg = `Masih banyak peluang sales tertahan di gudang. Butuh ${need} generic lagi untuk mencapai target 95%.`;
-      sub = `<b>${displayed}</b> dari <b>${whCount}</b> generic di gudang sudah terdisplay. Masih ada <b>${missingCount} generic</b> (<b>${qtyTxt} pcs</b>) yang menunggu dipajang. Yuk bagi tugas per MC dan mulai dari qty terbesar!`;
+      msg = `Masih banyak peluang sales tertahan di gudang. Butuh ${nf(need)} ${unit} lagi untuk mencapai target 95%.`;
+      sub = `<b>${nf(displayed)}</b> dari <b>${nf(whCount)}</b> ${unit} di gudang sudah terdisplay. Masih ada <b>${nf(missingCount)} ${unit}</b> (<b>${qtyTxt} pcs</b>) yang menunggu dipajang. Yuk bagi tugas per MC dan mulai dari qty terbesar!`;
     }
+    if(cfg.extra) sub += ' ' + cfg.extra;
 
-    document.getElementById('covPct').textContent = pctTxt;
-    document.getElementById('covMsg').textContent = msg;
-    document.getElementById('covSub').innerHTML = sub;
-    document.getElementById('coverage').classList.toggle('done', reached);
-    const bar = document.getElementById('covBar');
+    document.getElementById('covPct' + sfx).textContent = pctTxt;
+    document.getElementById('covMsg' + sfx).textContent = msg;
+    document.getElementById('covSub' + sfx).innerHTML = sub;
+    document.getElementById('coverage' + sfx).classList.toggle('done', reached);
+    const bar = document.getElementById('covBar' + sfx);
     bar.style.width = '0';
     setTimeout(() => { bar.style.width = pct + '%'; }, 60);
   }
@@ -1726,7 +2113,7 @@
   }
   function optionsFor(level){
     const counts = {};
-    summaryRows.forEach(r => {
+    baseRows().forEach(r => {
       if(matchLevels(r, level)) counts[r[level]] = (counts[r[level]] || 0) + 1;
     });
     return Object.keys(counts).sort((a,b) => a.localeCompare(b)).map(v => ({value:v, count:counts[v]}));
@@ -1843,15 +2230,23 @@
     if(e.key === 'Escape') Object.values(msEls).forEach(o => o.classList.remove('open'));
   });
 
+  // daftar bin panjang diringkas: 3 bin pertama + "+N"; daftar lengkap ada di tooltip dan di detail
+  function binShort(txt){
+    const arr = String(txt || '').split(', ').filter(Boolean);
+    return arr.length > 3 ? arr.slice(0, 3).join(', ') + ' +' + (arr.length - 3) : arr.join(', ');
+  }
+
   function getFilteredRows(){
     const q = searchInput.value.trim().toLowerCase();
-    let rows = summaryRows.filter(r =>
+    let rows = baseRows().filter(r =>
       LEVELS.every(l => !selected[l].size || selected[l].has(r[l]))
     );
     if(q){
       rows = rows.filter(r =>
         r.genericCode.toLowerCase().includes(q) ||
         String(r.sampleName).toLowerCase().includes(q) ||
+        (r.color && r.color.toLowerCase().includes(q)) ||
+        (r.dispColors && r.dispColors.join(' ').toLowerCase().includes(q)) ||
         [r.mc2, r.mc3, r.mc4].join(' ').toLowerCase().includes(q)
       );
     }
@@ -1859,18 +2254,25 @@
   }
 
   function renderTable(){
+    const isV = listMode === 'varian';
+    const isD = listMode === 'display';
+    const isX = listMode === 'double';
+    const hasColor = isV || isX;
+    const unit = MODE_UNIT[listMode];
+    const base = baseRows();
     let rows = getFilteredRows();
     const qtySum = rows.reduce((a,r) => a + r.totalQty, 0);
-    filterCount.innerHTML = `Menampilkan <strong>${rows.length}</strong> dari ${summaryRows.length} generic &middot; qty <strong>${qtySum}</strong>`;
+    filterCount.innerHTML = `Menampilkan <strong>${rows.length}</strong> dari ${base.length} ${unit} &middot; qty${(isD || isX) ? ' display' : ''} <strong>${qtySum}</strong>`;
     rows = sortRows(rows);
     const mSort = document.getElementById('mSort');
     const sv = sortState.key + ':' + sortState.dir;
     if([...mSort.options].some(o => o.value === sv)) mSort.value = sv;
 
     if(!rows.length){
+      const none = curRows().length === 0;
       tableWrap.innerHTML = `<div class="empty-state">
-        <div class="big">${summaryRows.length === 0 ? 'Semua barang sudah terdisplay, mantap! 🎉' : 'Tidak ada hasil untuk filter / pencarian ini'}</div>
-        <div>${summaryRows.length === 0 ? 'Tidak ada generic yang tertahan di gudang. Display lengkap, peluang sales terbuka lebar.' : 'Coba ubah pilihan MC LV atau kata kunci, atau klik Reset filter.'}</div>
+        <div class="big">${none ? (isX ? 'Tidak ada display double, mantap! 🎉' : isD ? 'Belum ada artikel yang terdisplay' : `Semua ${unit} sudah terdisplay, mantap! 🎉`) : 'Tidak ada hasil untuk filter / pencarian ini'}</div>
+        <div>${none ? (isX ? 'Semua varian di display sudah pas 1 qty.' : isD ? 'Tidak ada generic di Selling area pada file ini.' : `Tidak ada ${unit} yang tertahan di gudang. Display lengkap, peluang sales terbuka lebar.`) : 'Coba ubah pilihan MC LV atau kata kunci, atau klik Reset filter.'}</div>
       </div>`;
       return;
     }
@@ -1885,35 +2287,53 @@
           ${showFoto ? '<th class="th-foto">Foto</th>' : ''}
           <th data-sort="genericCode">Generic Code ${arrow('genericCode')}</th>
           <th data-sort="sampleName">Nama Artikel ${arrow('sampleName')}</th>
+          ${hasColor ? `<th data-sort="color">Warna ${arrow('color')}</th>` : ''}
           <th data-sort="mc2">MC LV 2 ${arrow('mc2')}</th>
           <th data-sort="mc3">MC LV 3 ${arrow('mc3')}</th>
           <th data-sort="mc4">MC LV 4 ${arrow('mc4')}</th>
           <th data-sort="skuCount">Jml SKU ${arrow('skuCount')}</th>
-          <th data-sort="totalQty">Available Qty ${arrow('totalQty')}</th>
-          <th data-sort="binCodes">Bin Code ${arrow('binCodes')}</th>
+          <th data-sort="totalQty">${(isD || isX) ? 'Qty Display' : 'Available Qty'} ${arrow('totalQty')}</th>
+          ${isD ? `<th data-sort="whQty">Qty Gudang ${arrow('whQty')}</th>` : ''}
+          <th data-sort="binCodes">${(isD || isX) ? 'Bin Display' : 'Bin Code'} ${arrow('binCodes')}</th>
         </tr>
       </thead>
       <tbody>`;
 
     rows.forEach(r => {
-      const isOpen = openRows.has(r.genericCode);
+      const key = r.rowKey || r.genericCode;
+      const isOpen = openRows.has(key);
       const pname = String(r.sampleName).split(',')[0].trim();
-      html += `<tr class="main-row ${isOpen ? 'is-open':''}" data-gc="${escapeAttr(r.genericCode)}">
+      let sub = '';
+      if(isV){
+        sub = r.genDisplayed
+          ? `<div class="v-sub"><span class="v-tag ok">${r.isBucket ? 'Produk' : 'Generic'} sudah terdisplay</span>${r.dispColors.length ? 'warna di display: ' + escapeHtml(r.dispColors.join(', ')) : ''}</div>`
+          : `<div class="v-sub"><span class="v-tag warn">${r.isBucket ? 'Produk' : 'Generic'} belum terdisplay</span></div>`;
+      } else if(isD){
+        const shown = r.dispColors.length ? 'di display: ' + escapeHtml(r.dispColors.join(', ')) : '';
+        sub = r.complete
+          ? `<div class="v-sub"><span class="v-tag ok">Warna lengkap</span>${shown}</div>`
+          : `<div class="v-sub"><span class="v-tag warn">Belum didisplay: ${escapeHtml(r.missColors.join(', '))}</span>${shown}</div>`;
+      } else if(isX){
+        sub = `<div class="v-sub"><span class="v-tag warn">Lebih ${r.excess} pcs</span>${r.binCount > 1 ? 'tersebar di ' + r.binCount + ' bin' : ''}</div>`;
+      }
+      html += `<tr class="main-row ${isOpen ? 'is-open':''}" data-gc="${escapeAttr(key)}">
         <td class="c-caret"><span class="caret ${isOpen ? 'open':''}">&#9656;</span></td>
-        ${showFoto ? `<td class="c-foto">${thumbHtml(r.genericCode, pname, r.colors)}</td>` : ''}
+        ${showFoto ? `<td class="c-foto">${thumbHtml(r.genericCode, pname, r.colors, hasColor && r.colors.length > 0)}</td>` : ''}
         <td class="mono c-gc">${escapeHtml(r.genericCode)}</td>
-        <td class="name-cell c-name" title="${escapeAttr(r.sampleName)}">${escapeHtml(pname)}</td>
+        <td class="name-cell c-name" title="${escapeAttr(r.sampleName)}">${escapeHtml(pname)}${sub}</td>
+        ${hasColor ? `<td class="mc-cell c-mc c-color"><span class="cp">${escapeHtml(r.colorLabel)}</span></td>` : ''}
         <td class="mc-cell c-mc">${escapeHtml(r.mc2)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc3)}</td>
         <td class="mc-cell c-mc">${escapeHtml(r.mc4)}</td>
-        <td class="c-mcm" aria-hidden="true"><span>${escapeHtml(r.mc2)}</span><span>${escapeHtml(r.mc3)}</span><span>${escapeHtml(r.mc4)}</span></td>
+        <td class="c-mcm" aria-hidden="true">${hasColor ? `<span class="cchip">${escapeHtml(r.colorLabel)}</span>` : ''}${isD ? `<span class="gchip">Gudang ${r.whQty} pcs</span>` : ''}<span>${escapeHtml(r.mc2)}</span><span>${escapeHtml(r.mc3)}</span><span>${escapeHtml(r.mc4)}</span></td>
         <td class="c-break" aria-hidden="true"></td>
         <td class="num-cell c-sku">${r.skuCount}</td>
         <td class="num-cell c-qty">${r.totalQty}</td>
-        <td class="mono c-bin">${escapeHtml(r.binCodes)}</td>
+        ${isD ? `<td class="num-cell c-whq">${r.whQty}</td>` : ''}
+        <td class="mono c-bin" title="${escapeAttr(r.binCodes)}">${escapeHtml(binShort(r.binCodes))}</td>
       </tr>`;
-      html += `<tr class="detail-row ${isOpen ? 'open':''}" data-detail-for="${escapeAttr(r.genericCode)}">
-        <td colspan="${showFoto ? 10 : 9}"><div class="detail-inner">${renderDetailTable(r.genericCode)}</div></td>
+      html += `<tr class="detail-row ${isOpen ? 'open':''}" data-detail-for="${escapeAttr(key)}">
+        <td colspan="${(showFoto ? 10 : 9) + (hasColor ? 1 : 0) + (isD ? 1 : 0)}"><div class="detail-inner">${isOpen ? renderDetailTable(r.genericCode, key) : ''}</div></td>
       </tr>`;
     });
 
@@ -1922,11 +2342,11 @@
 
     tableWrap.querySelectorAll('thead th[data-sort]').forEach(th => {
       th.addEventListener('click', () => {
-        const key = th.getAttribute('data-sort');
-        if(sortState.key === key){
+        const k = th.getAttribute('data-sort');
+        if(sortState.key === k){
           sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
         } else {
-          sortState = {key, dir:'asc'};
+          sortState = {key: k, dir:'asc'};
         }
         renderTable();
       });
@@ -1935,15 +2355,15 @@
     tableWrap.querySelectorAll('.main-row').forEach(tr => {
       tr.addEventListener('click', (e) => {
         if(e.target.closest('.thumb')) return;   // klik foto = buka foto, bukan buka detail
-        const gc = tr.getAttribute('data-gc');
-        if(openRows.has(gc)) openRows.delete(gc); else openRows.add(gc);
+        const k = tr.getAttribute('data-gc');
+        if(openRows.has(k)) openRows.delete(k); else openRows.add(k);
         renderTable();
       });
     });
   }
 
-  function renderDetailTable(gc){
-    const rows = detailByGeneric[gc] || [];
+  function renderDetailTable(gc, key){
+    const rows = ({generic: detailByGeneric, varian: detailByVariant, display: detailByDisplay, double: activeDouble().detail}[listMode] || {})[key] || [];
     if(!rows.length) return '<em>Tidak ada detail baris.</em>';
     const cols = allColumns.length ? allColumns : Object.keys(rows[0]);
     const showFoto = imgState === 'ok';
@@ -2032,6 +2452,12 @@
     clearError();
     summaryRows = [];
     analysisRows = [];
+    variantRows = [];
+    displayRows = [];
+    detailByDisplay = {};
+    doubleSets = {all:{rows:[], detail:{}, stats:{}}};
+    analysisRowsV = [];
+    detailByVariant = {};
     detailByGeneric = {};
   });
 
@@ -2137,11 +2563,28 @@
 
   // --- tab & analisa ---
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
-  document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.seg button[data-level]').forEach(b => b.addEventListener('click', () => {
     anLevel = b.dataset.level;
     syncAnControls();
     renderAnalysis();
   }));
+  document.querySelectorAll('.seg button[data-basis]').forEach(b => b.addEventListener('click', () => {
+    anBasis = b.dataset.basis;
+    populateAnMc2();
+    syncAnControls();
+    renderAnalysis();
+  }));
+  vOnlyDisp.addEventListener('change', () => {
+    openRows = new Set();
+    refreshFilterOptions();
+    renderTable();
+  });
+  dOnlyIncomplete.addEventListener('change', () => {
+    openRows = new Set();
+    refreshFilterOptions();
+    renderTable();
+  });
+
   anMc2.addEventListener('change', renderAnalysis);
   document.getElementById('anMerge').addEventListener('change', (e) => {
     anMerge = e.target.checked;
@@ -2173,6 +2616,8 @@
   resetFilterBtn.addEventListener('click', () => {
     LEVELS.forEach(l => selected[l].clear());
     searchInput.value = '';
+    vOnlyDisp.checked = false;
+    dOnlyIncomplete.checked = false;
     refreshFilterOptions();
     renderTable();
   });
@@ -2183,9 +2628,50 @@
       alert('Tidak ada data untuk diexport.');
       return;
     }
-    const wsSummaryData = exportRows.map(r => ({
+    const isV = listMode === 'varian';
+    const isD = listMode === 'display';
+    const isX = listMode === 'double';
+    const nameOf = r => String(r.sampleName).split(',')[0].trim();
+    const wsSummaryData = exportRows.map(r => isX ? ({
       'Generic Code': r.genericCode,
-      'Nama Artikel': String(r.sampleName).split(',')[0].trim(),
+      'Nama Artikel': nameOf(r),
+      'Warna': r.colorLabel,
+      'MC LV 2': r.mc2,
+      'MC LV 3': r.mc3,
+      'MC LV 4': r.mc4,
+      'Jumlah SKU (ukuran) di Display': r.skuCount,
+      'Qty Display (Available)': r.totalQty,
+      'Kelebihan (pcs)': r.excess,
+      'Jumlah Bin': r.binCount,
+      'Bin Display': r.binCodes,
+    }) : isD ? ({
+      'Generic Code': r.genericCode,
+      'Nama Artikel': nameOf(r),
+      'Warna di Display': r.dispColors.join(', '),
+      'Status Warna': r.complete ? 'Lengkap' : 'Belum lengkap',
+      'Warna Belum Didisplay': r.missColors.join(', '),
+      'MC LV 2': r.mc2,
+      'MC LV 3': r.mc3,
+      'MC LV 4': r.mc4,
+      'Jumlah SKU di Display': r.skuCount,
+      'Qty Display (Available)': r.totalQty,
+      'Qty Gudang (Available)': r.whQty,
+      'Bin Display': r.binCodes,
+    }) : isV ? ({
+      'Generic Code': r.genericCode,
+      'Nama Artikel': nameOf(r),
+      'Warna': r.colorLabel,
+      'Status Generic': r.genDisplayed ? 'Sudah terdisplay' : 'Belum terdisplay',
+      'Warna Lain di Display': r.dispColors.join(', '),
+      'MC LV 2': r.mc2,
+      'MC LV 3': r.mc3,
+      'MC LV 4': r.mc4,
+      'Jumlah SKU (ukuran)': r.skuCount,
+      'Available Qty (Warehouse)': r.totalQty,
+      'Bin Code': r.binCodes,
+    }) : ({
+      'Generic Code': r.genericCode,
+      'Nama Artikel': nameOf(r),
       'MC LV 2': r.mc2,
       'MC LV 3': r.mc3,
       'MC LV 4': r.mc4,
@@ -2195,7 +2681,8 @@
     }));
     const wsDetailData = [];
     exportRows.forEach(s => {
-      (detailByGeneric[s.genericCode] || []).forEach(r => wsDetailData.push(r));
+      const src = isX ? activeDouble().detail[s.rowKey] : isD ? detailByDisplay[s.rowKey] : (isV ? detailByVariant[s.rowKey] : detailByGeneric[s.genericCode]);
+      (src || []).forEach(r => wsDetailData.push(r));
     });
 
     const wb = XLSX.utils.book_new();
@@ -2205,7 +2692,7 @@
     XLSX.utils.book_append_sheet(wb, ws2, 'Detail SKU');
     const picked = LEVELS.flatMap(l => [...selected[l]]);
     const tag = (picked.length > 3 ? 'multi-MC' : picked.join('_')).replace(/[^\w-]+/g,'-');
-    XLSX.writeFile(wb, 'Barang_Belum_Terdisplay' + (tag ? '_' + tag : '') + '.xlsx');
+    XLSX.writeFile(wb, (isX ? 'Display_Double_Varian' : isD ? 'Artikel_Sudah_Terdisplay' : (isV ? 'Varian_Belum_Terdisplay' : 'Barang_Belum_Terdisplay')) + (tag ? '_' + tag : '') + '.xlsx');
   });
 
   loadImageDB();
