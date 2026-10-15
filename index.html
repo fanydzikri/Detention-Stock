@@ -73,6 +73,44 @@
     padding:6px 14px;font-size:12.5px;font-weight:600;
   }
   .store-chip.show{display:inline-flex;}
+
+  /* ---------- Notifikasi (lonceng di header) ---------- */
+  .notif{position:relative;flex:none;}
+  .notif[hidden]{display:none;}
+  .notif-btn{
+    position:relative;width:38px;height:38px;border-radius:50%;border:1px solid var(--line-strong);
+    background:var(--panel);color:var(--navy);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+  }
+  .notif-btn:hover, .notif.open .notif-btn{background:var(--navy-tint);border-color:var(--navy);}
+  .notif-btn:focus-visible{outline:3px solid var(--orange);outline-offset:2px;}
+  .notif-badge{
+    position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:999px;padding:0 5px;
+    background:var(--orange);color:#fff;font-size:11px;font-weight:800;line-height:18px;text-align:center;
+    border:2px solid var(--panel);box-sizing:content-box;
+  }
+  .notif-panel{
+    display:none;position:absolute;right:0;top:calc(100% + 10px);width:410px;max-height:70vh;overflow:auto;
+    background:var(--panel);border:1px solid var(--line-strong);border-radius:12px;
+    box-shadow:0 16px 40px rgba(11,27,74,.18);z-index:70;
+  }
+  .notif.open .notif-panel{display:block;}
+  .notif-head{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:12px 16px;border-bottom:1px solid var(--line);font-weight:800;font-size:14px;color:var(--navy-ink);
+  }
+  .notif-head small{font-weight:600;font-size:12px;color:var(--ink-soft);}
+  .notif-list{list-style:none;margin:0;padding:6px 0;}
+  .notif-item{
+    display:flex;gap:10px;padding:10px 16px;font-size:13px;line-height:1.45;color:var(--ink-soft);
+  }
+  .notif-item + .notif-item{border-top:1px solid var(--line);}
+  .notif-item b{color:var(--navy);}
+  .notif-item .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--navy);margin-top:6px;}
+  .notif-item.muted{color:var(--ink-soft);font-style:italic;}
+  .notif-sec{border-top:1px solid var(--line);padding:12px 16px 14px;background:#FAFBFE;border-radius:0 0 12px 12px;}
+  .notif .notif-sec .foto-bar, .notif .notif-sec .foto-bar.ok{border:none;background:transparent;padding:0;margin:0;gap:8px;font-size:13px;}
+  .notif .notif-sec .foto-bar .btn{margin-left:auto;}
+  #excludeNote{display:none !important;}
   .store-chip svg{flex:none;}
 
   /* ---------- Hero ---------- */
@@ -529,7 +567,10 @@
     .brandbar .wrap{gap:10px;padding-top:10px;padding-bottom:10px;}
     .brandbar img{height:28px;}
     .brandbar .sep, .brandbar .app{display:none;}
-    .store-chip{max-width:58vw;padding:5px 10px;font-size:11.5px;}
+    .store-chip{max-width:calc(100vw - 200px);min-width:0;padding:5px 10px;font-size:11.5px;}
+    .notif-btn{width:34px;height:34px;}
+    .notif-panel{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 58px);left:12px;right:12px;width:auto;max-height:72vh;}
+    .notif .notif-sec .foto-bar .btn{margin-left:0;width:100%;}
     .store-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
     /* hero */
@@ -805,6 +846,23 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg>
       <span id="storeName"></span>
     </span>
+    <div class="notif" id="notifWrap" hidden>
+      <button type="button" class="notif-btn" id="notifBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="notifPanel" aria-label="Notifikasi">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notifBadge">0</span>
+      </button>
+      <div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notifikasi">
+        <div class="notif-head">Info &amp; catatan data <small id="notifFile"></small></div>
+        <ul class="notif-list" id="notifList"></ul>
+        <div class="notif-sec">
+          <div class="foto-bar" id="fotoBar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span id="fotoBarText">Memeriksa foto produk&hellip;</span>
+            <button type="button" class="btn ghost" id="fotoBtn">Aktifkan foto</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -940,11 +998,6 @@
 
     <div class="tab-panel" id="panelList" role="tabpanel">
 
-    <div class="foto-bar" id="fotoBar">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      <span id="fotoBarText">Memeriksa foto produk&hellip;</span>
-      <button type="button" class="btn ghost" id="fotoBtn">Aktifkan foto</button>
-    </div>
 
     <div class="toolbar">
       <h2 id="listTitle">Generic Code belum terdisplay</h2>
@@ -1539,6 +1592,7 @@
     renderTable();
     renderAnalysis();
     updateFotoBar();
+    updateNotif();
   }
 
   // ===== Foto produk (gambar.json dari file master foto) =====
@@ -1779,6 +1833,23 @@
     a.download = 'gambar.json';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+
+  // ===== Notifikasi =====
+  const notifWrap = document.getElementById('notifWrap');
+  const notifBtn = document.getElementById('notifBtn');
+  function updateNotif(){
+    const html = document.getElementById('excludeText').innerHTML.trim();
+    const items = html ? html.split(/<br\s*\/?>/i).map(x => x.trim()).filter(Boolean) : [];
+    document.getElementById('notifList').innerHTML = items.length
+      ? items.map(x => `<li class="notif-item"><span class="dot"></span><span>${x}</span></li>`).join('')
+      : '<li class="notif-item muted">Tidak ada catatan untuk file ini.</li>';
+    document.getElementById('notifBadge').textContent = items.length + 1;   // + status foto
+    notifWrap.hidden = false;
+  }
+  function closeNotif(){
+    notifWrap.classList.remove('open');
+    notifBtn.setAttribute('aria-expanded', 'false');
   }
 
   // ===== Tab =====
@@ -2447,6 +2518,8 @@
   clearBtn.addEventListener('click', () => {
     fileInput.value = '';
     filenameBar.classList.remove('show');
+    notifWrap.hidden = true;
+    closeNotif();
     document.getElementById('storeChip').classList.remove('show');
     resultsArea.style.display = 'none';
     clearError();
@@ -2462,6 +2535,19 @@
   });
 
   searchInput.addEventListener('input', renderTable);
+
+  // --- notifikasi ---
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = !notifWrap.classList.contains('open');
+    notifWrap.classList.toggle('open', open);
+    notifBtn.setAttribute('aria-expanded', String(open));
+  });
+  document.getElementById('notifPanel').addEventListener('click', (e) => e.stopPropagation());
+  document.addEventListener('click', closeNotif);
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && notifWrap.classList.contains('open')){ closeNotif(); notifBtn.focus(); }
+  });
 
   // --- foto produk ---
   tableWrap.addEventListener('click', (e) => {
@@ -2523,7 +2609,7 @@
       else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
     }
   });
-  document.getElementById('fotoBtn').addEventListener('click', openFotoModal);
+  document.getElementById('fotoBtn').addEventListener('click', () => { closeNotif(); openFotoModal(); });
   document.getElementById('fotoDownloadBtn').addEventListener('click', downloadImageDB);
   document.getElementById('fotoLoadBtn').addEventListener('click', () => document.getElementById('fotoFile').click());
   document.getElementById('fotoMasterBtn').addEventListener('click', () => document.getElementById('fotoMasterFile').click());
