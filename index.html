@@ -551,6 +551,29 @@
   .d-help b{color:var(--ink);}
   .tab-badge.ok{background:var(--teal);}
   .d-help.warn{border-left-color:var(--orange);}
+
+  /* ---------- Rekomendasi substitusi (Display Double) ---------- */
+  .v-tag.rec{background:var(--teal-bg);color:var(--teal);}
+  .v-tag.none{background:var(--line);color:var(--ink-soft);}
+  .rec-box{background:#fff;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:10px;padding:12px 14px;margin:4px 0 12px;}
+  .rec-box.empty{border-left-color:var(--line-strong);}
+  .rec-head{font-weight:800;font-size:13.5px;color:var(--navy-ink);margin-bottom:10px;}
+  .rec-head span{font-weight:600;color:var(--ink-soft);font-size:12px;}
+  .rec-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+  .rec-card{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--panel);}
+  .rec-card .thumb{width:54px;height:54px;flex:none;}
+  .rec-num{flex:none;width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+  .rec-body{min-width:0;}
+  .rec-name{font-weight:700;font-size:13px;color:var(--ink);line-height:1.3;}
+  .rec-name .cp{margin-left:4px;font-size:11px;padding:1px 6px;}
+  .rec-meta{font-size:11.5px;color:var(--ink-soft);margin-top:3px;font-family:'JetBrains Mono',monospace;word-break:break-word;}
+  .rec-type{display:inline-block;font-size:10.5px;font-weight:700;border-radius:999px;padding:1px 8px;margin-top:4px;white-space:nowrap;}
+  .rec-type.same{background:var(--navy-tint);color:var(--navy);}
+  .rec-type.new{background:var(--orange-tint);color:var(--orange-deep);}
+  .rec-type.gap{background:var(--teal-bg);color:var(--teal);}
+  .rec-foot{margin-top:10px;font-size:12.5px;color:var(--ink-soft);display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .rec-empty{font-size:13px;color:var(--ink-soft);}
+  .rec-sub-head{font-size:12px;font-weight:700;color:var(--ink-soft);margin:4px 0 6px;}
   td.c-whq{color:var(--ink-soft);}
 
   /* elemen khusus mobile (disembunyikan di PC) */
@@ -816,6 +839,12 @@
     .tab{border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);margin:0;padding:9px 4px;font-size:12.5px;justify-content:center;}
     .tab[aria-selected="true"]{background:var(--navy);color:#fff;border-color:var(--navy);}
 
+    /* rekomendasi substitusi */
+    .rec-box{padding:10px 12px;}
+    .rec-list{grid-template-columns:1fr;}
+    .rec-card .thumb{width:56px;height:56px;}
+    .rec-foot .link-btn{width:100%;}
+
     /* tombol kembali ke atas */
     .to-top{
       display:flex;position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;
@@ -987,7 +1016,7 @@
     </div>
 
     <div class="tab-panel" id="panelDouble" hidden>
-      <div class="d-help warn"><b>Idealnya 1 varian (generic + warna) cukup 1 qty di display.</b> Daftar ini menampilkan varian yang qty-nya di Selling area 2 atau lebih (Available Qty, semua ukuran digabung). <b>Kelebihan</b> = qty display &minus; 1. Kelebihan ini bisa dikembalikan ke gudang, sehingga ruang display bisa dipakai untuk varian yang belum terdisplay.</div>
+      <div class="d-help warn"><b>Idealnya 1 varian (generic + warna) cukup 1 qty di display.</b> Daftar ini menampilkan varian yang qty-nya di Selling area 2 atau lebih (Available Qty, semua ukuran digabung). <b>Kelebihan</b> = qty display &minus; 1. Kelebihan ini bisa dikembalikan ke gudang, sehingga ruang display bisa dipakai untuk varian yang belum terdisplay.<br>Buka baris untuk melihat <b>rekomendasi pengganti</b>: varian atau generic yang belum terdisplay dengan <b>MC LV 2, 3, dan 4 yang sama</b>. Urutannya: warna lain dari generic yang sama, lalu generic yang belum terdisplay, lalu warna yang belum terdisplay dari generic lain. Stok gudang terbanyak didahulukan, dan satu barang hanya direkomendasikan sekali supaya tidak bentrok. <span id="recSummary"></span></div>
       <div class="stat-row">
         <div class="stat"><div class="num" id="statXDisp">0</div><div class="lbl">Varian di Display</div></div>
         <div class="stat ok"><div class="num" id="statXOne">0</div><div class="lbl">Pas 1 Qty (ideal)</div></div>
@@ -1530,7 +1559,9 @@
           binCount: x.bins.size,
           binCodes: [...x.bins].sort().join(', '),
           colors: x.color ? [x.color] : [],
-          isBucket: bucketGen.has(x.gc)
+          isBucket: bucketGen.has(x.gc),
+          groupKey: x.gk,
+          recs: [], recPool: 0, recMcOk: true
         };
       });
       return {rows: rowsX, detail: detail, stats: {
@@ -1541,6 +1572,36 @@
       }};
     };
     doubleSets = {all: buildDouble(false)};
+
+    // ----- rekomendasi substitusi: kandidat = varian belum terdisplay dengan MC LV 2/3/4 sama -----
+    const mcKeyOf = r => [r.mc2, r.mc3, r.mc4].join('\u0001');
+    const noMc = r => r.mc2 === '-' && r.mc3 === '-' && r.mc4 === '-';
+    const candByMc = {};
+    variantRows.forEach(v => { if(!noMc(v)) (candByMc[mcKeyOf(v)] = candByMc[mcKeyOf(v)] || []).push(v); });
+    const usedCand = new Set();
+    const typeRank = {same: 0, new: 1, gap: 2};
+    doubleSets.all.rows.slice()
+      .sort((a, b) => b.excess - a.excess || b.totalQty - a.totalQty || a.rowKey.localeCompare(b.rowKey))
+      .forEach(dr => {
+        dr.recMcOk = !noMc(dr);
+        const pool = dr.recMcOk ? (candByMc[mcKeyOf(dr)] || []) : [];
+        dr.recPool = pool.length;
+        const typed = pool.map(c => ({c: c, type: c.groupKey === dr.groupKey ? 'same' : (c.genDisplayed ? 'gap' : 'new')}));
+        typed.sort((a, b) => typeRank[a.type] - typeRank[b.type] || b.c.totalQty - a.c.totalQty || String(a.c.sampleName).localeCompare(String(b.c.sampleName)));
+        dr.recs = [];
+        for(const t of typed){
+          if(dr.recs.length >= dr.excess) break;
+          if(usedCand.has(t.c.rowKey)) continue;
+          usedCand.add(t.c.rowKey);
+          dr.recs.push(t);
+        }
+      });
+    {
+      const xs = doubleSets.all.rows;
+      const exc = xs.reduce((a, r) => a + r.excess, 0);
+      const got = xs.reduce((a, r) => a + r.recs.length, 0);
+      document.getElementById('recSummary').innerHTML = xs.length ? `Untuk file ini: <b>${fmtNum(got)} dari ${fmtNum(exc)} pcs kelebihan</b> sudah punya rekomendasi pengganti.` : '';
+    }
 
     const dFull = displayRows.filter(r => r.complete).length;
     document.getElementById('statDCount').textContent = fmtNum(displayRows.length);
@@ -2301,6 +2362,53 @@
     if(e.key === 'Escape') Object.values(msEls).forEach(o => o.classList.remove('open'));
   });
 
+  const REC_TYPE_LABEL = {same: 'Warna lain, generic sama', new: 'Generic belum terdisplay', gap: 'Warna belum terdisplay (generic lain)'};
+  function renderRecs(r){
+    const mcTxt = [r.mc2, r.mc3, r.mc4].map(escapeHtml).join(' &rsaquo; ');
+    if(!r.recMcOk){
+      return `<div class="rec-box empty"><div class="rec-empty">Rekomendasi pengganti tidak bisa dibuat karena artikel ini tidak punya data MC LV 2, 3, dan 4.</div></div>`;
+    }
+    if(!r.recs.length){
+      return `<div class="rec-box empty"><div class="rec-head">Rekomendasi pengganti <span>(MC: ${mcTxt})</span></div>
+        <div class="rec-empty">${r.recPool ? 'Semua kandidat di kategori ini sudah direkomendasikan untuk artikel double lain yang kelebihannya lebih besar.' : 'Belum ada varian atau generic lain yang belum terdisplay di kategori yang sama.'} Kelebihan ${r.excess} pcs bisa dikembalikan ke gudang.</div></div>`;
+    }
+    const cards = r.recs.map((t, i) => {
+      const c = t.c;
+      const nm = String(c.sampleName).split(',')[0].trim();
+      return `<div class="rec-card">
+        <span class="rec-num">${i + 1}</span>
+        ${imgState === 'ok' ? thumbHtml(c.genericCode, nm, c.colors, c.colors.length > 0) : ''}
+        <div class="rec-body">
+          <div class="rec-name">${escapeHtml(nm)}<span class="cp">${escapeHtml(c.colorLabel)}</span></div>
+          <span class="rec-type ${t.type}">${REC_TYPE_LABEL[t.type]}</span>
+          <div class="rec-meta">${escapeHtml(c.genericCode)} &middot; gudang ${c.totalQty} pcs &middot; bin ${escapeHtml(binShort(c.binCodes))}</div>
+        </div>
+      </div>`;
+    }).join('');
+    const short = r.excess - r.recs.length;
+    const rest = Math.max(0, r.recPool - r.recs.length);
+    return `<div class="rec-box">
+      <div class="rec-head">Rekomendasi pengganti untuk ${r.excess} pcs kelebihan <span>(MC: ${mcTxt})</span></div>
+      <div class="rec-list">${cards}</div>
+      <div class="rec-foot">
+        <span>${short > 0 ? `Kandidat di kategori ini habis untuk ${short} pcs lainnya; kelebihan itu bisa dikembalikan ke gudang. ` : ''}${rest ? `Ada ${rest} kandidat lain di kategori ini.` : ''}</span>
+        <button type="button" class="link-btn rec-more" data-mc2="${escapeAttr(r.mc2)}" data-mc3="${escapeAttr(r.mc3)}" data-mc4="${escapeAttr(r.mc4)}">Lihat semua di tab Varian &rarr;</button>
+      </div>
+    </div>`;
+  }
+
+  function openVarianMC(m2, m3, m4){
+    switchTab('varian');
+    LEVELS.forEach(l => selected[l].clear());
+    selected.mc2.add(m2); selected.mc3.add(m3); selected.mc4.add(m4);
+    searchInput.value = '';
+    vOnlyDisp.checked = false;
+    openRows = new Set();
+    refreshFilterOptions();
+    renderTable();
+    requestAnimationFrame(() => document.querySelector('.toolbar').scrollIntoView({behavior:'smooth', block:'start'}));
+  }
+
   // daftar bin panjang diringkas: 3 bin pertama + "+N"; daftar lengkap ada di tooltip dan di detail
   function binShort(txt){
     const arr = String(txt || '').split(', ').filter(Boolean);
@@ -2385,7 +2493,10 @@
           ? `<div class="v-sub"><span class="v-tag ok">Warna lengkap</span>${shown}</div>`
           : `<div class="v-sub"><span class="v-tag warn">Belum didisplay: ${escapeHtml(r.missColors.join(', '))}</span>${shown}</div>`;
       } else if(isX){
-        sub = `<div class="v-sub"><span class="v-tag warn">Lebih ${r.excess} pcs</span>${r.binCount > 1 ? 'tersebar di ' + r.binCount + ' bin' : ''}</div>`;
+        const recTag = r.recs.length
+          ? `<span class="v-tag rec">${r.recs.length} rekomendasi pengganti</span>`
+          : `<span class="v-tag none">Belum ada pengganti</span>`;
+        sub = `<div class="v-sub"><span class="v-tag warn">Lebih ${r.excess} pcs</span>${recTag}${r.binCount > 1 ? 'tersebar di ' + r.binCount + ' bin' : ''}</div>`;
       }
       html += `<tr class="main-row ${isOpen ? 'is-open':''}" data-gc="${escapeAttr(key)}">
         <td class="c-caret"><span class="caret ${isOpen ? 'open':''}">&#9656;</span></td>
@@ -2404,7 +2515,7 @@
         <td class="mono c-bin" title="${escapeAttr(r.binCodes)}">${escapeHtml(binShort(r.binCodes))}</td>
       </tr>`;
       html += `<tr class="detail-row ${isOpen ? 'open':''}" data-detail-for="${escapeAttr(key)}">
-        <td colspan="${(showFoto ? 10 : 9) + (hasColor ? 1 : 0) + (isD ? 1 : 0)}"><div class="detail-inner">${isOpen ? renderDetailTable(r.genericCode, key) : ''}</div></td>
+        <td colspan="${(showFoto ? 10 : 9) + (hasColor ? 1 : 0) + (isD ? 1 : 0)}"><div class="detail-inner">${isOpen ? (isX ? renderRecs(r) + '<div class="rec-sub-head">Posisi qty di display</div>' : '') + renderDetailTable(r.genericCode, key) : ''}</div></td>
       </tr>`;
     });
 
@@ -2547,6 +2658,11 @@
   document.addEventListener('click', closeNotif);
   document.addEventListener('keydown', (e) => {
     if(e.key === 'Escape' && notifWrap.classList.contains('open')){ closeNotif(); notifBtn.focus(); }
+  });
+
+  tableWrap.addEventListener('click', (e) => {
+    const b = e.target.closest('.rec-more');
+    if(b) openVarianMC(b.dataset.mc2, b.dataset.mc3, b.dataset.mc4);
   });
 
   // --- foto produk ---
@@ -2776,6 +2892,31 @@
     const ws2 = XLSX.utils.json_to_sheet(wsDetailData);
     XLSX.utils.book_append_sheet(wb, ws1, 'Ringkasan');
     XLSX.utils.book_append_sheet(wb, ws2, 'Detail SKU');
+    if(isX){
+      const recData = [];
+      exportRows.forEach(r => {
+        const base = {
+          'Generic Code (double)': r.genericCode, 'Nama Artikel (double)': nameOf(r), 'Warna (double)': r.colorLabel,
+          'MC LV 2': r.mc2, 'MC LV 3': r.mc3, 'MC LV 4': r.mc4,
+          'Qty Display': r.totalQty, 'Kelebihan (pcs)': r.excess, 'Bin Display': r.binCodes
+        };
+        if(!r.recs.length){
+          recData.push(Object.assign({}, base, {
+            'Rekomendasi ke-': '', 'Ganti dengan Generic': '', 'Nama Artikel Pengganti': '', 'Warna Pengganti': '',
+            'Jenis Rekomendasi': '', 'Qty Gudang Pengganti': '', 'Bin Gudang Pengganti': '',
+            'Keterangan': !r.recMcOk ? 'MC tidak tersedia' : (r.recPool ? 'Kandidat sudah dipakai artikel double lain' : 'Belum ada pengganti di MC yang sama')
+          }));
+        }
+        r.recs.forEach((t, i) => recData.push(Object.assign({}, base, {
+          'Rekomendasi ke-': i + 1, 'Ganti dengan Generic': t.c.genericCode, 'Nama Artikel Pengganti': nameOf(t.c),
+          'Warna Pengganti': t.c.colorLabel, 'Jenis Rekomendasi': REC_TYPE_LABEL[t.type],
+          'Qty Gudang Pengganti': t.c.totalQty, 'Bin Gudang Pengganti': t.c.binCodes, 'Keterangan': ''
+        })));
+      });
+      const ws3 = XLSX.utils.json_to_sheet(recData);
+      ws3['!cols'] = Object.keys(recData[0] || {}).map(k => ({wch: Math.max(12, k.length + 2)}));
+      XLSX.utils.book_append_sheet(wb, ws3, 'Rekomendasi');
+    }
     const picked = LEVELS.flatMap(l => [...selected[l]]);
     const tag = (picked.length > 3 ? 'multi-MC' : picked.join('_')).replace(/[^\w-]+/g,'-');
     XLSX.writeFile(wb, (isX ? 'Display_Double_Varian' : isD ? 'Artikel_Sudah_Terdisplay' : (isV ? 'Varian_Belum_Terdisplay' : 'Barang_Belum_Terdisplay')) + (tag ? '_' + tag : '') + '.xlsx');
