@@ -576,6 +576,14 @@
   .rec-sub-head{font-size:12px;font-weight:700;color:var(--ink-soft);margin:4px 0 6px;}
   td.c-whq{color:var(--ink-soft);}
 
+  /* ---------- Header tabel menempel saat di-scroll ---------- */
+  .float-head{
+    position:fixed;z-index:45;display:none;overflow:hidden;
+    box-shadow:0 6px 14px rgba(11,27,74,.10);background:var(--navy-tint);
+  }
+  .float-head table{table-layout:fixed;border-collapse:collapse;background:var(--panel);will-change:transform;}
+  .float-head thead th{box-sizing:border-box;}
+
   /* elemen khusus mobile (disembunyikan di PC) */
   .m-sort, .ms-head, .to-top, td.c-break, td.c-mcm{display:none;}
 
@@ -2930,6 +2938,75 @@
     const tag = (picked.length > 3 ? 'multi-MC' : picked.join('_')).replace(/[^\w-]+/g,'-');
     XLSX.writeFile(wb, (isX ? 'Display_Double_Varian' : isD ? 'Artikel_Sudah_Terdisplay' : (isV ? 'Varian_Belum_Terdisplay' : 'Barang_Belum_Terdisplay')) + (tag ? '_' + tag : '') + '.xlsx');
   });
+
+  // ===== Header tabel ikut menempel di bawah header Eigerindo saat di-scroll =====
+  // Tabel ada di dalam kotak yang bisa digeser ke samping, jadi dibuat salinan header yang posisinya fixed,
+  // lebar kolomnya disamakan dengan tabel asli, dan ikut bergeser horizontal.
+  const floatHead = document.createElement('div');
+  floatHead.className = 'float-head';
+  floatHead.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(floatHead);
+  let fhSrc = null;
+
+  function activeTableScroll(){
+    const cands = [document.querySelector('#tableWrap > .table-scroll'), document.querySelector('#anTableWrap > .table-scroll')];
+    return cands.find(c => {
+      if(!c || c.offsetParent === null) return false;
+      const th = c.querySelector(':scope > table > thead');
+      return th && getComputedStyle(th).display !== 'none';
+    }) || null;
+  }
+
+  function updateFloatHead(rebuild){
+    const sc = activeTableScroll();
+    if(!sc){ floatHead.style.display = 'none'; fhSrc = null; return; }
+    const table = sc.querySelector(':scope > table');
+    const thead = table.tHead;
+    const topOff = document.querySelector('.brandbar').getBoundingClientRect().bottom;
+    const r = sc.getBoundingClientRect();
+    const hr = thead.getBoundingClientRect();
+    if(!(hr.top < topOff && r.bottom > topOff + hr.height + 30)){ floatHead.style.display = 'none'; return; }
+    if(rebuild || fhSrc !== table || !floatHead.firstChild){
+      const clone = table.cloneNode(false);
+      const h = thead.cloneNode(true);
+      clone.appendChild(h);
+      clone.style.width = table.offsetWidth + 'px';
+      const src = thead.querySelectorAll('th'), dst = h.querySelectorAll('th');
+      src.forEach((th, i) => {
+        if(!dst[i]) return;
+        const w = th.getBoundingClientRect().width + 'px';
+        dst[i].style.width = w; dst[i].style.minWidth = w; dst[i].style.maxWidth = w;
+      });
+      floatHead.innerHTML = '';
+      floatHead.appendChild(clone);
+      fhSrc = table;
+    }
+    floatHead.style.display = 'block';
+    floatHead.style.top = topOff + 'px';
+    floatHead.style.left = (r.left + sc.clientLeft) + 'px';
+    floatHead.style.width = sc.clientWidth + 'px';
+    floatHead.firstChild.style.transform = 'translateX(' + (-sc.scrollLeft) + 'px)';
+  }
+
+  // klik header salinan = klik header asli (mengurutkan)
+  floatHead.addEventListener('click', (e) => {
+    const th = e.target.closest('th');
+    if(!th || !fhSrc) return;
+    const sel = th.dataset.sort ? `th[data-sort="${th.dataset.sort}"]` : (th.dataset.ansort ? `th[data-ansort="${th.dataset.ansort}"]` : null);
+    const orig = sel ? fhSrc.querySelector(':scope > thead ' + sel) : null;
+    if(orig) orig.click();
+  });
+  let fhRaf = 0;
+  const fhSchedule = (rebuild) => {
+    if(rebuild){ cancelAnimationFrame(fhRaf); fhRaf = requestAnimationFrame(() => { fhRaf = 0; updateFloatHead(true); }); return; }
+    if(!fhRaf) fhRaf = requestAnimationFrame(() => { fhRaf = 0; updateFloatHead(false); });
+  };
+  window.addEventListener('scroll', () => fhSchedule(false), {passive: true});
+  window.addEventListener('resize', () => fhSchedule(true));
+  document.addEventListener('scroll', (e) => { if(e.target.classList && e.target.classList.contains('table-scroll')) fhSchedule(false); }, true);
+  new MutationObserver(() => fhSchedule(true)).observe(tableWrap, {childList: true, subtree: true});
+  new MutationObserver(() => fhSchedule(true)).observe(document.getElementById('anTableWrap'), {childList: true});
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => fhSchedule(true)));
 
   loadImageDB();
 })();
