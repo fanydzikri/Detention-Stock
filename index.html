@@ -1184,6 +1184,7 @@
   let analysisRowsV = [];    // varian (generic + warna) ber-stok di gudang: {gc, color, mc2, mc3, mc4, shown, qty}
   let anBasis = 'generic';   // generic | varian
   let variantRows = [];      // varian yang belum terdisplay
+  let storeColorsByGen = {}; // generic -> semua warna yang ada di toko (gudang ber-stok atau display)
   let displayRows = [];      // artikel yang sudah terdisplay (per kelompok produk)
   let detailByDisplay = {};  // kunci -> baris SKU di Selling area
   let doubleSets = {all:{rows:[], detail:{}, stats:{}}};  // display double per varian
@@ -1312,6 +1313,7 @@
     const varInfo = {};            // kunci varian -> info
     const saColorsByGen = {};      // kelompok produk -> warna yang sudah ada di Selling area
     const saGroupSet = new Set();  // kelompok produk yang sudah ada di Selling area
+    storeColorsByGen = {};
     const dispInfo = {};           // kelompok produk -> info baris di Selling area
     const sellList = [];           // semua baris Selling area (untuk deteksi display double)
     // Generic "keranjang campur" (satu kode dipakai banyak produk berbeda, mis. 990000492): untuk Varian
@@ -1343,6 +1345,9 @@
       const whAvailable = zoneNorm === 'warehouse' && (whQty === null || whQty > 0);
       if(zoneNorm === 'warehouse' && !whAvailable) noAvailGeneric.add(gc);
       if(whAvailable){ warehouseSet.add(gc); whVarSet.add(vk); }
+      if(vcol && (whAvailable || zoneNorm === 'sales area' || (binKey && isSellingBin(r[binKey])))){
+        (storeColorsByGen[gc] = storeColorsByGen[gc] || new Set()).add(vcol);
+      }
       // Terhitung terdisplay bila zone-nya Sales Area ATAU bin-nya bin Selling area (awalan S, mis. SA-, SB-, SH-)
       if(zoneNorm === 'sales area'){ salesAreaSet.add(gc); zoneSaSet.add(gc); }
       else if(binKey && isSellingBin(r[binKey])){ salesAreaSet.add(gc); }
@@ -1797,7 +1802,9 @@
     const {gc, name, colors} = lbCtx;
     const info = lbCtx.color ? imgInfo(gc, [lbCtx.color]) : null;
     document.getElementById('lbTitle').textContent = name || gc;
-    document.getElementById('lbSub').innerHTML = 'Generic <b>' + escapeHtml(gc) + '</b>' + (colors.length ? ' &middot; warna di toko: <b>' + escapeHtml(colors.join(', ')) + '</b>' : '');
+    // semua warna generic ini yang ada di toko (gudang ber-stok atau display), bukan hanya warna baris yang diklik
+    const storeCols = storeColorsByGen[gc] ? [...storeColorsByGen[gc]].sort() : colors.slice();
+    document.getElementById('lbSub').innerHTML = 'Generic <b>' + escapeHtml(gc) + '</b>' + (storeCols.length ? ' &middot; warna di toko: <b>' + escapeHtml(storeCols.join(', ')) + '</b>' : '');
     const stage = document.getElementById('lbStage'), strip = document.getElementById('lbStrip');
     const prev = document.getElementById('lbPrev'), next = document.getElementById('lbNext'), count = document.getElementById('lbCount');
     const wrap = document.getElementById('lbColorsWrap');
@@ -1818,14 +1825,15 @@
     strip.innerHTML = n < 2 ? '' : info.urls.map((u, i) =>
       `<button type="button" data-i="${i}" aria-label="Foto ${i + 1}" aria-current="${i === lbCtx.idx}"><img src="${escapeAttr(sized(u, 120))}" data-orig="${escapeAttr(u)}" alt="" loading="lazy" referrerpolicy="no-referrer"></button>`).join('');
     // chip warna dari master
-    const upper = colors.map(c => c.toUpperCase());
+    const upper = storeCols.map(c => c.toUpperCase());
+    const prefUpper = colors.map(c => c.toUpperCase());
     wrap.hidden = false;
     document.getElementById('lbColors').innerHTML = info.names.map(nm =>
       `<button type="button" class="lb-chip ${upper.includes(nm.toUpperCase()) ? 'match' : ''}" data-color-name="${escapeAttr(nm)}" aria-pressed="${nm === info.color}">${escapeHtml(nm)}</button>`).join('');
-    const anyStoreColor = info.names.some(nm => upper.includes(nm.toUpperCase()));
+    const anyStoreColor = info.names.some(nm => prefUpper.includes(nm.toUpperCase()));
     let note = '';
     if(colors.length && !anyStoreColor) note = 'Foto warna ' + colors.join(', ') + ' belum ada di master. Yang tampil adalah foto referensi warna lain.';
-    else if(upper.length) note = 'Lingkaran oranye = warna yang ada di toko.';
+    else if(upper.length) note = 'Lingkaran oranye = warna yang ada di toko (gudang atau display).';
     document.getElementById('lbNote').textContent = note;
   }
 
@@ -2637,6 +2645,7 @@
     summaryRows = [];
     analysisRows = [];
     variantRows = [];
+    storeColorsByGen = {};
     displayRows = [];
     detailByDisplay = {};
     doubleSets = {all:{rows:[], detail:{}, stats:{}}};
