@@ -367,7 +367,10 @@
   .tab-badge{background:var(--orange);color:#fff;border-radius:999px;font-size:11.5px;padding:1px 8px;font-weight:700;}
   .tab[aria-selected="false"] .tab-badge{background:var(--line);color:var(--ink-soft);}
   .tab-panel[hidden]{display:none;}
-  .toolbar{scroll-margin-top:84px;}
+  .toolbar, .tab-panel{scroll-margin-top:calc(var(--bb-h, 66px) + var(--tabs-h, 50px) + 10px);}
+  /* baris tab ikut menempel di bawah header Eigerindo */
+  .tabs{position:sticky;top:var(--bb-h, 66px);z-index:44;background:var(--paper);}
+  .tabs.stuck{box-shadow:0 10px 14px -12px rgba(11,27,74,.35);}
 
   /* ---------- Analisa per MC ---------- */
   .an-head h2{font-size:18px;font-weight:800;margin:0 0 4px;color:var(--navy-ink);letter-spacing:-0.01em;}
@@ -843,7 +846,7 @@
     .c-mcm span.gchip{background:var(--teal-bg);color:var(--teal);}
 
     /* 5 tab: jadi grid 3 kolom di HP */
-    .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;border-bottom:none;overflow:visible;margin-bottom:16px;}
+    .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;border-bottom:none;overflow:visible;margin-bottom:16px;padding:6px 0;}
     .tab{border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);margin:0;padding:9px 4px;font-size:12.5px;justify-content:center;}
     .tab[aria-selected="true"]{background:var(--navy);color:#fff;border-color:var(--navy);}
 
@@ -2962,7 +2965,7 @@
     if(!sc){ floatHead.style.display = 'none'; fhSrc = null; return; }
     const table = sc.querySelector(':scope > table');
     const thead = table.tHead;
-    const topOff = document.querySelector('.brandbar').getBoundingClientRect().bottom;
+    const topOff = stickyTop();
     const r = sc.getBoundingClientRect();
     const hr = thead.getBoundingClientRect();
     if(!(hr.top < topOff && r.bottom > topOff + hr.height + 30)){ floatHead.style.display = 'none'; return; }
@@ -2987,6 +2990,31 @@
     floatHead.style.width = sc.clientWidth + 'px';
     floatHead.firstChild.style.transform = 'translateX(' + (-sc.scrollLeft) + 'px)';
   }
+
+  // batas bawah area yang menempel di atas: header Eigerindo + baris tab (kalau tab sedang menempel)
+  const tabsEl = document.querySelector('.tabs');
+  const brandEl = document.querySelector('.brandbar');
+  function stickyTop(){
+    const bb = brandEl.getBoundingClientRect().bottom;
+    if(!tabsEl || tabsEl.offsetParent === null) return bb;
+    return Math.max(bb, tabsEl.getBoundingClientRect().bottom);
+  }
+  function syncStickyVars(){
+    document.documentElement.style.setProperty('--bb-h', brandEl.offsetHeight + 'px');
+    if(tabsEl && tabsEl.offsetHeight) document.documentElement.style.setProperty('--tabs-h', tabsEl.offsetHeight + 'px');
+    if(tabsEl) tabsEl.classList.toggle('stuck', tabsEl.offsetParent !== null && window.scrollY > 0 &&
+      tabsEl.getBoundingClientRect().top <= brandEl.getBoundingClientRect().bottom + 0.5);
+  }
+  syncStickyVars();
+  window.addEventListener('scroll', syncStickyVars, {passive: true});
+  window.addEventListener('resize', syncStickyVars);
+  new MutationObserver(syncStickyVars).observe(resultsArea, {attributes: true, attributeFilter: ['style']});
+  // pindah tab saat sedang di-scroll jauh: bawa ke awal isi tab tersebut
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    if(!tabsEl.classList.contains('stuck')) return;
+    const panel = [...document.querySelectorAll('#resultsArea .tab-panel')].find(el => !el.hidden);
+    if(panel) panel.scrollIntoView({block: 'start'});
+  }));
 
   // klik header salinan = klik header asli (mengurutkan)
   floatHead.addEventListener('click', (e) => {
